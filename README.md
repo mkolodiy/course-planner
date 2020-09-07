@@ -1,3 +1,3 @@
-### Course Planner
+# Course Planner
 
 Create and manage language courses.
