@@ -1,6 +1,6 @@
 const supertest = require('supertest');
 const app = require('../app');
-const { defaultMessage, createNotFoundMessage } = require('../common/messages');
+const { defaultMessage } = require('../common/messages');
 
 describe('GET /api/v1', () => {
   it('should respond with default message', async () => {

@@ -19,9 +19,9 @@ const createConnection = () =>
         console.log('MongoDB connection successful.');
       }
     })
-    .catch((error) =>
+    .catch(err =>
       console.log(
-        `MongoDB connection error. Please make sure MongoDB is running. ${error}`
+        `MongoDB connection error. Please make sure MongoDB is running. ${err}`
       )
     );
 
