@@ -1,7 +1,7 @@
-const { getNotFoundMessage } = require('./common/messages');
+const { createNotFoundMessage } = require('./common/messages');
 
 function notFound(req, res, next) {
-  const error = new Error(getNotFoundMessage(req.originalUrl));
+  const error = new Error(createNotFoundMessage(req.originalUrl));
   res.status(404);
   next(error);
 }

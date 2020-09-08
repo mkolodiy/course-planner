@@ -1,6 +1,6 @@
 const supertest = require('supertest');
 const app = require('./app');
-const { defaultMessage, getNotFoundMessage } = require('./common/messages');
+const { defaultMessage, createNotFoundMessage } = require('./common/messages');
 
 describe('GET /', () => {
   it('should respond with default message', async () => {
@@ -19,6 +19,6 @@ describe('GET /', () => {
       .expect('Content-Type', /json/)
       .expect(404);
 
-    expect(response.body.message).toEqual(getNotFoundMessage(url));
+    expect(response.body.message).toEqual(createNotFoundMessage(url));
   });
 });

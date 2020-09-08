@@ -1,13 +1,28 @@
+require('dotenv').config();
 const express = require('express');
-const messages = require('./common/messages');
+const mongoose = require('mongoose');
+const { defaultMessage } = require('./common/messages');
 const { notFound, errorHandler } = require('./middlewares');
 
 const app = express();
 app.use(express.json());
 
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log('MongoDB connection successful.'))
+  .catch((error) =>
+    console.log(
+      `MongoDB connection error. Please make sure MongoDB is running. ${error}`
+    )
+  );
+
 app.get('/', (req, res) => {
   res.json({
-    message: messages.defaultMessage
+    message: defaultMessage
   });
 });
 
