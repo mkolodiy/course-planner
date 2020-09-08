@@ -1,30 +1,22 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const morgan = require('morgan');
+
 const { defaultMessage } = require('./common/messages');
 const { notFound, errorHandler } = require('./middlewares');
 
+const api = require('./api');
+
 const app = express();
 app.use(express.json());
-
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-  })
-  .then(() => console.log('MongoDB connection successful.'))
-  .catch((error) =>
-    console.log(
-      `MongoDB connection error. Please make sure MongoDB is running. ${error}`
-    )
-  );
+app.use(morgan('tiny'));
 
 app.get('/', (req, res) => {
   res.json({
     message: defaultMessage
   });
 });
+
+app.use('/api/v1', api);
 
 app.use(notFound);
 app.use(errorHandler);
