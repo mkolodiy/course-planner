@@ -5,7 +5,7 @@ const { defaultMessage } = require('../common/messages');
 describe('GET /api/v1', () => {
   it('should respond with default message', async () => {
     const response = await supertest(app)
-      .get('/')
+      .get('/api/v1')
       .expect('Content-Type', /json/)
       .expect(200);
 
