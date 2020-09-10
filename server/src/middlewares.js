@@ -1,4 +1,5 @@
-const { createNotFoundMessage } = require('./common/messages');
+const { createNotFoundMessage, invalidToken } = require('./common/messages');
+const jwt = require('./common/jwt');
 
 const notFound = (req, res, next) => {
   const error = new Error(createNotFoundMessage(req.originalUrl));
@@ -13,7 +14,25 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
+const authenticateToken = async (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return res.sendStatus(401);
+  }
+
+  try {
+    const user = await jwt.verify(token);
+    req.user = user;
+    next();
+  } catch (err) {
+    res.status(403);
+    next(new Error(invalidToken));
+  }
+};
+
 module.exports = {
   notFound,
-  errorHandler
+  errorHandler,
+  authenticateToken
 };

@@ -31,14 +31,13 @@ describe('POST /api/v1/auth/signup', () => {
     expect(user.lastName).toEqual(testUser.lastName);
     expect(user.email).toEqual(testUser.email);
     expect(user.password).not.toBeDefined();
+
+    const token = response.body.token;
+    expect(token).toBeDefined();
   });
 
   it('should return 403 status when user already exists', async () => {
-    await supertest(app)
-      .post('/api/v1/auth/signup')
-      .send(testUser)
-      .expect('Content-Type', /json/)
-      .expect(200);
+    await supertest(app).post('/api/v1/auth/signup').send(testUser);
 
     const response = await supertest(app)
       .post('/api/v1/auth/signup')
@@ -79,6 +78,9 @@ describe('POST /api/v1/auth/signin', () => {
     expect(user.lastName).toEqual(testUser.lastName);
     expect(user.email).toEqual(testUser.email);
     expect(user.password).not.toBeDefined();
+
+    const token = response.body.token;
+    expect(token).toBeDefined();
   });
 
   it('should return 403 when user does not exist', async () => {

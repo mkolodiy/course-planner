@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../users/users.model');
+const jwt = require('../../common/jwt');
 const {
   emailInUse,
   userNotExisting,
@@ -26,8 +27,11 @@ router.post('/signup', async (req, res, next) => {
       password
     });
 
+    const token = await jwt.sign({ email: user.email });
+
     res.json({
-      user: getAllowedUserFields(user)
+      user: getAllowedUserFields(user),
+      token
     });
   } catch (err) {
     next(err);
@@ -49,8 +53,11 @@ router.post('/signin', async (req, res, next) => {
       throw new Error(invalidLogin);
     }
 
+    const token = await jwt.sign({ email: user.email });
+
     res.json({
-      user: getAllowedUserFields(user)
+      user: getAllowedUserFields(user),
+      token
     });
   } catch (err) {
     next(err);

@@ -1,4 +1,5 @@
 const express = require('express');
+const { authenticateToken } = require('../middlewares');
 const { defaultMessage } = require('../common/messages');
 
 const auth = require('./auth/auth.routes');
@@ -13,6 +14,9 @@ router.get('/', (req, res) => {
 });
 
 router.use('/auth', auth);
+
+router.use(authenticateToken);
+
 router.use('/users', users);
 
 module.exports = router;

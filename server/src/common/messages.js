@@ -3,11 +3,13 @@ const createNotFoundMessage = url => `Not found - ${url}`;
 const emailInUse = 'Email in use.';
 const invalidLogin = 'Invalid login.';
 const userNotExisting = 'User does not exist.';
+const invalidToken = 'Invalid token.';
 
 module.exports = {
   defaultMessage,
   createNotFoundMessage,
   emailInUse,
   invalidLogin,
-  userNotExisting
+  userNotExisting,
+  invalidToken
 };

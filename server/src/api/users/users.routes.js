@@ -6,7 +6,7 @@ const { userNotExisting } = require('../../common/messages');
 const router = express.Router();
 
 router.get('/profile', async (req, res, next) => {
-  const { email } = req.body;
+  const { email } = req.user;
   try {
     const user = await User.findOne({ email }).exec();
     if (!user) {

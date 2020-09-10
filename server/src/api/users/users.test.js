@@ -12,15 +12,11 @@ const testUser = {
 
 describe('POST /api/v1/users/profile', () => {
   beforeEach(async () => {
-    await supertest(app)
-      .post('/api/v1/auth/signup')
-      .send(testUser)
-      .expect('Content-Type', /json/)
-      .expect(200);
+    await supertest(app).post('/api/v1/auth/signup').send(testUser);
   });
 
   afterEach(async () => {
-    await User.deleteMany();
+    await User.deleteMany({});
   });
 
   it('should return user information', async () => {

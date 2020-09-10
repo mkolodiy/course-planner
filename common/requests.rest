@@ -17,3 +17,9 @@ content-type: application/json
     "email": "john@doe.com",
     "password": "test1234"
 }
+
+###
+
+GET http://localhost:5050/api/v1/users/profile
+content-type: application/json
+authorization: token xxx
