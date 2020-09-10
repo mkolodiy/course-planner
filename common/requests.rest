@@ -7,3 +7,13 @@ content-type: application/json
     "email": "john@doe.com",
     "password": "test1234"
 }
+
+###
+
+POST http://localhost:5050/api/v1/auth/signin
+content-type: application/json
+
+{
+    "email": "john@doe.com",
+    "password": "test1234"
+}

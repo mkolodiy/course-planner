@@ -1,6 +1,11 @@
 const express = require('express');
 const User = require('../users/users.model');
-const { emailInUse } = require('../../common/messages');
+const {
+  emailInUse,
+  userNotExisting,
+  invalidLogin
+} = require('../../common/messages');
+const { getAllowedUserFields } = require('../../common/utils');
 
 const router = express.Router();
 
@@ -14,27 +19,42 @@ router.post('/signup', async (req, res, next) => {
       throw new Error(emailInUse);
     }
 
-    const insertedUser = await User.create({
+    const user = await User.create({
       firstName,
       lastName,
       email,
       password
     });
 
-    const allowedUserFileds = {
-      firstName: insertedUser.firstName,
-      lastName: insertedUser.lastName,
-      email: insertedUser.email
-    };
-
     res.json({
-      user: allowedUserFileds
+      user: getAllowedUserFields(user)
     });
   } catch (err) {
     next(err);
   }
 });
 
-router.post('/signin', () => {});
+router.post('/signin', async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
+      res.status(403);
+      throw new Error(userNotExisting);
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      res.status(403);
+      throw new Error(invalidLogin);
+    }
+
+    res.json({
+      user: getAllowedUserFields(user)
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;
