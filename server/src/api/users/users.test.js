@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const app = require('../../app');
 const User = require('./users.model');
-const { userNotExisting } = require('../../common/messages');
+const { userNotExisting, invalidToken } = require('../../common/messages');
 
 const testUser = {
   firstName: 'John',
@@ -10,9 +10,15 @@ const testUser = {
   password: 'test1234'
 };
 
+let token;
+
 describe('POST /api/v1/users/profile', () => {
   beforeEach(async () => {
-    await supertest(app).post('/api/v1/auth/signup').send(testUser);
+    const response = await supertest(app)
+      .post('/api/v1/auth/signup')
+      .send(testUser);
+
+    token = response.body.token;
   });
 
   afterEach(async () => {
@@ -22,9 +28,7 @@ describe('POST /api/v1/users/profile', () => {
   it('should return user information', async () => {
     const response = await supertest(app)
       .get('/api/v1/users/profile')
-      .send({
-        email: testUser.email
-      })
+      .set('Authorization', `Bearer ${token}`)
       .expect('Content-Type', /json/)
       .expect(200);
 
@@ -35,12 +39,22 @@ describe('POST /api/v1/users/profile', () => {
     expect(user.password).not.toBeDefined();
   });
 
-  it('should return 403 when user does not exist', async () => {
+  it('should return 403 when token is invalid', async () => {
     const response = await supertest(app)
       .get('/api/v1/users/profile')
-      .send({
-        email: 'test@test.com'
-      })
+      .set('Authorization', 'Bearer xxx')
+      .expect('Content-Type', /json/)
+      .expect(403);
+
+    const message = response.body.message;
+    expect(message).toEqual(invalidToken);
+  });
+
+  it('should return 403 when user does not exist', async () => {
+    await User.deleteMany({});
+    const response = await supertest(app)
+      .get('/api/v1/users/profile')
+      .set('Authorization', `Bearer ${token}`)
       .expect('Content-Type', /json/)
       .expect(403);
 

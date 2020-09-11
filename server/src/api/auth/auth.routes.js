@@ -27,7 +27,7 @@ router.post('/signup', async (req, res, next) => {
       password
     });
 
-    const token = await jwt.sign({ email: user.email });
+    const token = await jwt.sign({ id: user._id });
 
     res.json({
       user: getAllowedUserFields(user),
@@ -53,7 +53,7 @@ router.post('/signin', async (req, res, next) => {
       throw new Error(invalidLogin);
     }
 
-    const token = await jwt.sign({ email: user.email });
+    const token = await jwt.sign({ id: user._id });
 
     res.json({
       user: getAllowedUserFields(user),
