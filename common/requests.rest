@@ -23,3 +23,16 @@ content-type: application/json
 GET http://localhost:5050/api/v1/users/profile
 content-type: application/json
 authorization: token xxx
+
+###
+
+POST http://localhost:5050/api/v1/users/profile
+content-type: application/json
+authorization: token xxx
+
+{
+    "firstName": "James",
+    "lastName": "Bright",
+    "email": "james@bright.com",
+    "password": "newtestpassword1234"
+}
