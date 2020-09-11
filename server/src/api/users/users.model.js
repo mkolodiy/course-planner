@@ -3,6 +3,11 @@ const bcrypt = require('bcrypt');
 
 const SALT_WORK_FACTOR = 10;
 
+const ROLES = {
+  TRAINER: 'TRAINER',
+  ADMIN: 'ADMIN'
+};
+
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -21,6 +26,10 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true
+    },
+    roles: {
+      type: [String],
+      default: [ROLES.TRAINER]
     }
   },
   { timestamps: true }

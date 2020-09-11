@@ -6,7 +6,10 @@ const {
   userNotExisting,
   invalidLogin
 } = require('../../common/messages');
-const { getAllowedUserFields } = require('../../common/utils');
+const {
+  getAllowedUserFields,
+  getUserFieldForToken
+} = require('../../common/utils');
 
 const router = express.Router();
 
@@ -27,7 +30,7 @@ router.post('/signup', async (req, res, next) => {
       password
     });
 
-    const token = await jwt.sign({ id: user._id });
+    const token = await jwt.sign(getUserFieldForToken(user));
 
     res.json({
       user: getAllowedUserFields(user),
@@ -53,7 +56,7 @@ router.post('/signin', async (req, res, next) => {
       throw new Error(invalidLogin);
     }
 
-    const token = await jwt.sign({ id: user._id });
+    const token = await jwt.sign(getUserFieldForToken(user));
 
     res.json({
       user: getAllowedUserFields(user),
