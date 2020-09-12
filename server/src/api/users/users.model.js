@@ -54,4 +54,8 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+userSchema.statics.getRoles = function () {
+  return ROLES;
+};
+
 module.exports = mongoose.model('User', userSchema);

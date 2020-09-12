@@ -1,5 +1,5 @@
 const express = require('express');
-const { authenticateToken } = require('../middlewares');
+const { authenticateToken, hasAdminAccess } = require('../middlewares');
 const { defaultMessage } = require('../common/messages');
 
 const auth = require('./auth/auth.routes');
@@ -17,8 +17,9 @@ router.get('/', (req, res) => {
 router.use('/auth', auth);
 
 router.use(authenticateToken);
-
 router.use('/users', users);
+
+router.use(hasAdminAccess);
 router.use('/coursetypes', courseTypes);
 
 module.exports = router;

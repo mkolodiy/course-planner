@@ -1,10 +1,15 @@
-const { createNotFoundMessage, invalidToken } = require('./common/messages');
+const {
+  createNotFoundMessage,
+  invalidToken,
+  accessNotAllowed
+} = require('./common/messages');
 const jwt = require('./common/jwt');
+const User = require('./api/users/users.model');
 
 const notFound = (req, res, next) => {
   const error = new Error(createNotFoundMessage(req.originalUrl));
   res.status(404);
-  next(error);
+  return next(error);
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -31,8 +36,19 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 
+const hasAdminAccess = async (req, res, next) => {
+  const { roles } = req.user;
+  if (roles.includes(User.getRoles().ADMIN)) {
+    return next();
+  }
+
+  res.status(403);
+  next(new Error(accessNotAllowed));
+};
+
 module.exports = {
   notFound,
   errorHandler,
-  authenticateToken
+  authenticateToken,
+  hasAdminAccess
 };

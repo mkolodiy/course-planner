@@ -5,7 +5,8 @@ content-type: application/json
     "firstName": "John",
     "lastName": "Doe",
     "email": "john@doe.com",
-    "password": "test1234"
+    "password": "test1234",
+    "roles": ["TRAINER"]
 }
 
 ###
@@ -14,8 +15,8 @@ POST http://localhost:5050/api/v1/auth/signin
 content-type: application/json
 
 {
-    "email": "john@doe.com",
-    "password": "test1234"
+    "email": "james@bright.com",
+    "password": "newtestpassword1234"
 }
 
 ###
@@ -35,4 +36,16 @@ authorization: token xxx
     "lastName": "Bright",
     "email": "james@bright.com",
     "password": "newtestpassword1234"
+}
+
+###
+
+POST http://localhost:5050/api/v1/coursetypes
+content-type: application/json
+authorization: token xxx
+
+{
+    "name": "Intensive course",
+    "courseDuration": 10,
+    "unitDuration": 4
 }
