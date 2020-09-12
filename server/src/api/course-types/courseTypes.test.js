@@ -84,3 +84,37 @@ describe('POST /api/v1/coursetypes', () => {
     expect(message).toEqual(accessNotAllowed);
   });
 });
+
+describe('POST /api/v1/coursetypes', () => {
+  afterEach(async () => {
+    await CourseType.deleteMany({});
+  });
+
+  it('should return all course types', async () => {
+    await CourseType.create(testCourseType);
+    await CourseType.create({
+      ...testCourseType,
+      name: 'Test course type'
+    });
+    const response = await supertest(app)
+      .get('/api/v1/coursetypes')
+      .set('Authorization', `Bearer ${adminToken}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    const courseTypes = response.body.courseTypes;
+    expect(courseTypes.length).toEqual(2);
+  });
+
+  it('should fail if user is not an admin', async () => {
+    const response = await supertest(app)
+      .post('/api/v1/coursetypes')
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .send(testCourseType)
+      .expect('Content-Type', /json/)
+      .expect(403);
+
+    const message = response.body.message;
+    expect(message).toEqual(accessNotAllowed);
+  });
+});
