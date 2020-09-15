@@ -15,8 +15,8 @@ POST http://localhost:5050/api/v1/auth/signin
 content-type: application/json
 
 {
-    "email": "james@bright.com",
-    "password": "newtestpassword1234"
+    "email": "john@doe.com",
+    "password": "test1234"
 }
 
 ###
@@ -45,7 +45,7 @@ content-type: application/json
 authorization: token xxx
 
 {
-    "name": "Intensive course",
+    "name": "Easy course 3",
     "courseDuration": 10,
     "unitDuration": 4
 }
@@ -54,4 +54,4 @@ authorization: token xxx
 
 GET http://localhost:5050/api/v1/coursetypes
 content-type: application/json
-authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNWNlNmYyN2QyYThkMWRhOTI0ZjMzMyIsInJvbGVzIjpbIlRSQUlORVIiLCJBRE1JTiJdLCJpYXQiOjE1OTk5MjU5ODcsImV4cCI6MTYwMDAxMjM4N30.gsx8PMlp1orM9ojFgmaaUr0iaFAL5ZI4U3zKTJuNG38
+authorization: token xxx

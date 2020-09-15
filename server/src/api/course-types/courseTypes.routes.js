@@ -20,7 +20,7 @@ router.post('/', async (req, res, next) => {
     });
 
     res.json({
-      courseType
+      courseType: courseType.getProperties()
     });
   } catch (err) {
     next(err);
@@ -31,7 +31,7 @@ router.get('/', async (req, res, next) => {
   try {
     const courseTypes = await CourseType.find({});
     res.json({
-      courseTypes
+      courseTypes: CourseType.getProperties(courseTypes)
     });
   } catch (err) {
     next(err);
