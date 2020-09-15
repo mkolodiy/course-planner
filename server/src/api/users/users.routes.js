@@ -1,6 +1,5 @@
 const express = require('express');
 const User = require('../users/users.model');
-const { getAllowedUserFields } = require('../../common/utils');
 const { userNotExisting } = require('../../common/messages');
 
 const router = express.Router();
@@ -15,7 +14,7 @@ router.get('/profile', async (req, res, next) => {
     }
 
     res.json({
-      user: getAllowedUserFields(user)
+      user: user.getProperties()
     });
   } catch (err) {
     next(err);
@@ -39,7 +38,7 @@ router.post('/profile', async (req, res, next) => {
     const updatedUser = await user.save();
 
     res.json({
-      user: getAllowedUserFields(updatedUser)
+      user: user.getProperties()
     });
   } catch (err) {
     next(err);

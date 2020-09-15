@@ -26,6 +26,7 @@ router.post('/', async (req, res, next) => {
     next(err);
   }
 });
+
 router.get('/', async (req, res, next) => {
   try {
     const courseTypes = await CourseType.find({});
@@ -36,7 +37,9 @@ router.get('/', async (req, res, next) => {
     next(err);
   }
 });
+
 router.post('/:id', async (req, res, next) => {});
+
 router.delete('/:id', async (req, res, next) => {});
 
 module.exports = router;

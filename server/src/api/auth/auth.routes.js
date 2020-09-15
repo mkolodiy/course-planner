@@ -6,10 +6,6 @@ const {
   userNotExisting,
   invalidLogin
 } = require('../../common/messages');
-const {
-  getAllowedUserFields,
-  getUserFieldForToken
-} = require('../../common/utils');
 
 const router = express.Router();
 
@@ -30,10 +26,10 @@ router.post('/signup', async (req, res, next) => {
       password
     });
 
-    const token = await jwt.sign(getUserFieldForToken(user));
+    const token = await jwt.sign(user.getPropertiesForToken());
 
     res.json({
-      user: getAllowedUserFields(user),
+      user: user.getProperties(),
       token
     });
   } catch (err) {
@@ -56,13 +52,14 @@ router.post('/signin', async (req, res, next) => {
       throw new Error(invalidLogin);
     }
 
-    const token = await jwt.sign(getUserFieldForToken(user));
+    const token = await jwt.sign(user.getPropertiesForToken());
 
     res.json({
-      user: getAllowedUserFields(user),
+      user: user.getProperties(),
       token
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });

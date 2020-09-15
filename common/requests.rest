@@ -2,10 +2,10 @@ POST http://localhost:5050/api/v1/auth/signup
 content-type: application/json
 
 {
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john@doe.com",
-    "password": "test1234",
+    "firstName": "James",
+    "lastName": "Bright",
+    "email": "james@bright.com",
+    "password": "newtestpassword1234",
     "roles": ["TRAINER"]
 }
 
@@ -49,3 +49,9 @@ authorization: token xxx
     "courseDuration": 10,
     "unitDuration": 4
 }
+
+###
+
+GET http://localhost:5050/api/v1/coursetypes
+content-type: application/json
+authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNWNlNmYyN2QyYThkMWRhOTI0ZjMzMyIsInJvbGVzIjpbIlRSQUlORVIiLCJBRE1JTiJdLCJpYXQiOjE1OTk5MjU5ODcsImV4cCI6MTYwMDAxMjM4N30.gsx8PMlp1orM9ojFgmaaUr0iaFAL5ZI4U3zKTJuNG38
