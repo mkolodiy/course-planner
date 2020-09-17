@@ -54,4 +54,20 @@ authorization: token xxx
 
 GET http://localhost:5050/api/v1/coursetypes
 content-type: application/json
-authorization: token xxx
+authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNWNlNmYyN2QyYThkMWRhOTI0ZjMzMyIsInJvbGVzIjpbIlRSQUlORVIiLCJBRE1JTiJdLCJpYXQiOjE2MDAxODc1NDYsImV4cCI6MTYwMDI3Mzk0Nn0.G7hcKfIH7uigw7Xxg_GEgJy5DQL7gSGXjYt2pUBOIzs
+
+###
+
+POST http://localhost:5050/api/v1/coursetypes/5f60ea70f080e90ba668b5fa
+content-type: application/json
+authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNWNlNmYyN2QyYThkMWRhOTI0ZjMzMyIsInJvbGVzIjpbIlRSQUlORVIiLCJBRE1JTiJdLCJpYXQiOjE2MDAxODc1NDYsImV4cCI6MTYwMDI3Mzk0Nn0.G7hcKfIH7uigw7Xxg_GEgJy5DQL7gSGXjYt2pUBOIzs
+
+{
+    "name": "New Name"
+}
+
+###
+
+DELETE http://localhost:5050/api/v1/coursetypes/5f60ea70f080e90ba668b5fa
+content-type: application/json
+authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNWNlNmYyN2QyYThkMWRhOTI0ZjMzMyIsInJvbGVzIjpbIlRSQUlORVIiLCJBRE1JTiJdLCJpYXQiOjE2MDAxODc1NDYsImV4cCI6MTYwMDI3Mzk0Nn0.G7hcKfIH7uigw7Xxg_GEgJy5DQL7gSGXjYt2pUBOIzs

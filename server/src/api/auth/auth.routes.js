@@ -59,7 +59,6 @@ router.post('/signin', async (req, res, next) => {
       token
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 });

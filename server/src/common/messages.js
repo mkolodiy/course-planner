@@ -5,7 +5,8 @@ const invalidLogin = 'Invalid login.';
 const userNotExisting = 'User does not exist.';
 const invalidToken = 'Invalid token.';
 const accessNotAllowed = 'Access not allowed.';
-const courseAlreadyDefined = 'Course type already defined.';
+const courseTypeAlreadyDefined = 'Course type already defined.';
+const courseTypeDeleted = 'Course type successfully deleted.';
 
 module.exports = {
   defaultMessage,
@@ -15,5 +16,6 @@ module.exports = {
   userNotExisting,
   invalidToken,
   accessNotAllowed,
-  courseAlreadyDefined
+  courseTypeAlreadyDefined,
+  courseTypeDeleted
 };
