@@ -1,8 +1,25 @@
 const express = require('express');
+const Course = require('./courses.model');
 
 const router = express.Router();
 
-router.post('/', async () => {});
+router.post('/', async (req, res, next) => {
+  const { name, type, startDate, endDate } = req.body;
+  try {
+    const course = await Course.create({
+      name,
+      type,
+      startDate,
+      endDate
+    });
+
+    res.json({
+      course: await course.getProperties()
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.get('/', async () => {});
 

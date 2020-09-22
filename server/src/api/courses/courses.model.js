@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const CourseType = require('../course-types/courseTypes.model');
 
-const participantsSchema = new mongoose.Schema(
+const courseSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -37,4 +38,15 @@ const participantsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Paricipant', participantsSchema);
+courseSchema.methods.getProperties = async function () {
+  const courseType = await CourseType.findById(this.type).exec();
+  return {
+    id: this._id,
+    name: this.name,
+    type: courseType.getProperties(),
+    startDate: this.startDate,
+    endDate: this.endDate
+  };
+};
+
+module.exports = mongoose.model('Course', courseSchema);
