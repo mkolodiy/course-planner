@@ -33,7 +33,12 @@ const courseSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Worklog'
       }
-    ]
+    ],
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    }
   },
   { timestamps: true }
 );
@@ -47,6 +52,16 @@ courseSchema.methods.getProperties = async function () {
     startDate: this.startDate,
     endDate: this.endDate
   };
+};
+
+courseSchema.statics.getProperties = async function (object) {
+  if (Array.isArray(object)) {
+    return await Promise.all(
+      object.map(async entry => await entry.getProperties())
+    );
+  }
+
+  return await object.getProperties();
 };
 
 module.exports = mongoose.model('Course', courseSchema);

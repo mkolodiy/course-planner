@@ -28,19 +28,21 @@ const testCourseType = {
   unitDuration: 4
 };
 
-const createTestCourse = courseTypeId => ({
+const createTestCourse = (courseTypeId, userId) => ({
   name: 'Test course',
   type: courseTypeId,
   startDate: new Date(),
-  endDate: new Date()
+  endDate: new Date(),
+  user: userId
 });
 
 let trainerToken;
 let adminToken;
 let courseType;
+let user;
 
 beforeAll(async () => {
-  await User.create(trainerTestUser);
+  user = await User.create(trainerTestUser);
   const trainerResponse = await supertest(app)
     .post('/api/v1/auth/signin')
     .send({
@@ -70,10 +72,13 @@ describe('POST /api/v1/courses', () => {
   });
 
   it('should create a course', async () => {
-    const testCourse = createTestCourse(courseType.getProperties().id);
+    const testCourse = createTestCourse(
+      courseType.getProperties().id,
+      user.getProperties().id
+    );
     const response = await supertest(app)
       .post('/api/v1/courses')
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${trainerToken}`)
       .send(testCourse)
       .expect('Content-Type', /json/)
       .expect(200);
@@ -83,5 +88,54 @@ describe('POST /api/v1/courses', () => {
     expect(course.type.name).toEqual(testCourseType.name);
     expect(new Date(course.startDate)).toEqual(testCourse.startDate);
     expect(new Date(course.endDate)).toEqual(testCourse.endDate);
+  });
+
+  it('should failed if required properties are missing', async () => {
+    const testCourse = createTestCourse(
+      courseType.getProperties().id,
+      user.getProperties().id
+    );
+    delete testCourse.type;
+    const response = await supertest(app)
+      .post('/api/v1/courses')
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .send(testCourse)
+      .expect('Content-Type', /json/)
+      .expect(400);
+
+    const message = response.body.message;
+    expect(message).toBeTruthy();
+  });
+});
+
+describe('GET /api/v1/courses', () => {
+  afterEach(async () => {
+    await Course.deleteMany({});
+  });
+
+  it('should get all courses for a given user', async () => {
+    const testCourse1 = createTestCourse(
+      courseType.getProperties().id,
+      user.getProperties().id
+    );
+    const testCourse2 = createTestCourse(
+      courseType.getProperties().id,
+      user.getProperties().id
+    );
+    await Course.create(testCourse1);
+    await Course.create(testCourse2);
+
+    const response = await supertest(app)
+      .get('/api/v1/courses')
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    const courses = response.body.courses;
+    expect(courses.length).toBe(2);
+    const firstCourse = courses[0];
+    expect(firstCourse.name).toBe(testCourse1.name);
+    const secondCourse = courses[0];
+    expect(secondCourse.name).toBe(secondCourse.name);
   });
 });
