@@ -7,6 +7,7 @@ const invalidToken = 'Invalid token.';
 const accessNotAllowed = 'Access not allowed.';
 const courseTypeAlreadyDefined = 'Course type already defined.';
 const courseTypeDeleted = 'Course type successfully deleted.';
+const courseDeleted = 'Course successfully deleted.';
 
 module.exports = {
   defaultMessage,
@@ -17,5 +18,6 @@ module.exports = {
   invalidToken,
   accessNotAllowed,
   courseTypeAlreadyDefined,
-  courseTypeDeleted
+  courseTypeDeleted,
+  courseDeleted
 };

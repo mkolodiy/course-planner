@@ -148,7 +148,7 @@ describe('POST /api/v1/coursetypes/:id', () => {
     await CourseType.deleteMany({});
   });
 
-  it('should return all course types', async () => {
+  it('should update course type and return updated course type', async () => {
     const { id } = await CourseType.create(testCourseType);
 
     const response = await supertest(app)

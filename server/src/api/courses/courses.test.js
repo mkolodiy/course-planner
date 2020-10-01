@@ -3,6 +3,7 @@ const app = require('../../app');
 const User = require('../users/users.model');
 const CourseType = require('../course-types/courseTypes.model');
 const Course = require('./courses.model');
+const { courseDeleted } = require('../../common/messages');
 
 const ROLES = User.getRoles();
 
@@ -137,5 +138,86 @@ describe('GET /api/v1/courses', () => {
     expect(firstCourse.name).toBe(testCourse1.name);
     const secondCourse = courses[0];
     expect(secondCourse.name).toBe(secondCourse.name);
+  });
+});
+
+describe('POST /api/v1/courses/:id', () => {
+  const updatedCourse = {
+    name: 'Updated course',
+    startDate: new Date(),
+    endDate: new Date()
+  };
+
+  afterEach(async () => {
+    await Course.deleteMany({});
+  });
+
+  it('should update course and return updated course', async () => {
+    const testCourse = createTestCourse(
+      courseType.getProperties().id,
+      user.getProperties().id
+    );
+    const { id } = await Course.create(testCourse);
+
+    const response = await supertest(app)
+      .post(`/api/v1/courses/${id}`)
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .send(updatedCourse)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    const course = response.body.course;
+    expect(course.name).toEqual(updatedCourse.name);
+    expect(new Date(course.startDate)).toEqual(updatedCourse.startDate);
+    expect(new Date(course.endDate)).toEqual(updatedCourse.endDate);
+  });
+});
+
+describe('GET /api/v1/courses/:id', () => {
+  afterEach(async () => {
+    await Course.deleteMany({});
+  });
+
+  it('should return course by the given id', async () => {
+    const testCourse = createTestCourse(
+      courseType.getProperties().id,
+      user.getProperties().id
+    );
+    const { id } = await Course.create(testCourse);
+
+    const response = await supertest(app)
+      .get(`/api/v1/courses/${id}`)
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    const course = response.body.course;
+    expect(course.name).toEqual(testCourse.name);
+    expect(course.type.name).toEqual(testCourseType.name);
+    expect(new Date(course.startDate)).toEqual(testCourse.startDate);
+    expect(new Date(course.endDate)).toEqual(testCourse.endDate);
+  });
+});
+
+describe('GET /api/v1/courses/:id', () => {
+  afterEach(async () => {
+    await Course.deleteMany({});
+  });
+
+  it('should delete course and return a success message', async () => {
+    const testCourse = createTestCourse(
+      courseType.getProperties().id,
+      user.getProperties().id
+    );
+    const { id } = await Course.create(testCourse);
+
+    const response = await supertest(app)
+      .delete(`/api/v1/courses/${id}`)
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    const message = response.body.message;
+    expect(message).toEqual(courseDeleted);
   });
 });

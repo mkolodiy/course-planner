@@ -1,4 +1,5 @@
 const express = require('express');
+const { courseDeleted } = require('../../common/messages');
 const Course = require('./courses.model');
 
 const router = express.Router();
@@ -36,10 +37,47 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.post('/:id', async () => {});
+router.post('/:id', async (req, res, next) => {
+  const id = req.params.id;
+  const { body: update } = req;
+  try {
+    const course = await Course.findByIdAndUpdate(id, update, {
+      new: true
+    }).exec();
 
-router.get('/:id', async () => {});
+    res.json({
+      course: await course.getProperties()
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
-router.delete('/:id', async () => {});
+router.get('/:id', async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const course = await Course.findById(id).exec();
+
+    res.json({
+      course: await course.getProperties()
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    await Course.findByIdAndDelete(id).exec();
+
+    res.json({
+      message: courseDeleted
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;
