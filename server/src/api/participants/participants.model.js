@@ -12,20 +12,16 @@ const participantsSchema = new mongoose.Schema(
     },
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Course'
-    },
-    worklogEntries: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'WorklogEntry'
-      }
-    ]
+      ref: 'Course',
+      required: true
+    }
   },
   { timestamps: true }
 );
 
 participantsSchema.methods.getProperties = function () {
   return {
+    id: this._id,
     firstName: this.firstName,
     lastName: this.lastName
   };

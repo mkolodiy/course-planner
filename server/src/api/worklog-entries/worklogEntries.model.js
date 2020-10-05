@@ -7,11 +7,13 @@ const worklogEntrySchema = new mongoose.Schema(
       required: true,
       default: false
     },
-    participant: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Paricipant',
-      required: true
-    },
+    participant: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Paricipant',
+        required: true
+      }
+    ],
     worklog: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Worklog',
