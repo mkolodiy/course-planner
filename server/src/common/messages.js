@@ -8,6 +8,7 @@ const accessNotAllowed = 'Access not allowed.';
 const courseTypeAlreadyDefined = 'Course type already defined.';
 const courseTypeDeleted = 'Course type successfully deleted.';
 const courseDeleted = 'Course successfully deleted.';
+const participantDeleted = 'Participant successfully deleted.';
 
 module.exports = {
   defaultMessage,
@@ -19,5 +20,6 @@ module.exports = {
   accessNotAllowed,
   courseTypeAlreadyDefined,
   courseTypeDeleted,
-  courseDeleted
+  courseDeleted,
+  participantDeleted
 };

@@ -4,6 +4,7 @@ const User = require('../users/users.model');
 const CourseType = require('../course-types/courseTypes.model');
 const Course = require('../courses/courses.model');
 const Participant = require('./participants.model');
+const { participantDeleted } = require('../../common/messages');
 
 const ROLES = User.getRoles();
 
@@ -40,7 +41,7 @@ const createTestCourse = (courseTypeId, userId) => ({
 const createParticipant = courseId => ({
   firstName: 'Test',
   lastName: 'Participant',
-  course: courseId
+  courseId: courseId
 });
 
 let trainerToken;
@@ -111,5 +112,59 @@ describe('POST /api/v1/participants', () => {
       .send(testParticipant)
       .expect('Content-Type', /json/)
       .expect(400);
+  });
+});
+
+describe('GET /api/v1/participants/course/:courseId', () => {
+  afterEach(async () => {
+    await Participant.deleteMany({});
+  });
+
+  it('should return participats for given course', async () => {
+    const { id: courseId } = await course.getProperties();
+
+    const testParticipant = createParticipant(courseId);
+    await Participant.create({
+      ...testParticipant,
+      course: testParticipant.courseId
+    });
+    await Participant.create({
+      ...testParticipant,
+      course: testParticipant.courseId
+    });
+
+    const response = await supertest(app)
+      .get(`/api/v1/participants/course/${courseId}`)
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    const participants = response.body.participants;
+    expect(participants.length).toEqual(2);
+  });
+});
+
+describe('DELETE /api/v1/participants/:id', () => {
+  afterEach(async () => {
+    await Participant.deleteMany({});
+  });
+
+  it('should delete a participant', async () => {
+    const { id: courseId } = await course.getProperties();
+    const testParticipant = createParticipant(courseId);
+    const participant = await Participant.create({
+      ...testParticipant,
+      course: testParticipant.courseId
+    });
+    const { id } = participant.getProperties();
+
+    const response = await supertest(app)
+      .delete(`/api/v1/participants/${id}`)
+      .set('Authorization', `Bearer ${trainerToken}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    const message = response.body.message;
+    expect(message).toEqual(participantDeleted);
   });
 });
