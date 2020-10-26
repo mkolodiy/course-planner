@@ -1,0 +1,26 @@
+.signin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.avatar {
+  margin: 0.5rem 0;
+}
+
+.form {
+  margin-bottom: 1rem;
+}
+
+.button {
+  margin-top: 1rem !important;
+}
+
+.link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
