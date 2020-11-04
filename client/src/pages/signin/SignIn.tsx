@@ -1,4 +1,6 @@
-import React, { FC, FormEvent } from 'react';
+// @ts-nocheck
+
+import React, { FC, FormEvent, useState } from 'react';
 import {
   Container,
   Avatar,
@@ -9,11 +11,26 @@ import {
 import { LockOutlined } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import styles from './SignIn.module.scss';
+import useAuth from '../../hooks/useAuth';
 
 const Signin: FC = () => {
+  const { signIn } = useAuth();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleOnChangeEmail = (e: any) => setEmail(e.target.value);
+
+  const handleOnChangePassword = (e: any) => setPassword(e.target.value);
+
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log('onSubmit');
+    console.log('onSubmit', email);
+    console.log('onSubmit', password);
+    signIn({
+      email,
+      password
+    });
   };
 
   return (
@@ -36,6 +53,8 @@ const Signin: FC = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={handleOnChangeEmail}
           />
           <TextField
             variant="outlined"
@@ -47,6 +66,8 @@ const Signin: FC = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={handleOnChangePassword}
           />
           <Button
             type="submit"

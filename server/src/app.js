@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 
 const { defaultMessage } = require('./common/messages');
@@ -8,6 +9,7 @@ const api = require('./api');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(morgan('tiny'));
 
 app.get('/', (req, res) => {
