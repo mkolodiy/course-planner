@@ -6,43 +6,41 @@ import {
 } from '../../helper/localStorageUtils';
 import { User } from '../../types/models';
 
-interface State {
+export interface AuthState {
   token?: string | null;
   user?: User | null;
   loading?: boolean;
   error?: string;
 }
 
-export enum ActionType {
+export enum AuthActionType {
   SET_TOKEN_AND_USER = 'SET_TOKEN_AND_USER',
   SET_LOADING = 'SET_LOADING',
   SET_ERROR = 'SET_ERROR',
   RESET_STATE = 'RESET_STATE'
 }
 
-interface Action {
-  type: ActionType;
-  payload?: State;
+interface AuthAction {
+  type: AuthActionType;
+  payload?: AuthState;
 }
 
 const storedToken = getItemFromLocalStorage<string>(LocalStorageKey.TOKEN);
-const storedUser = getItemFromLocalStorage<User>(LocalStorageKey.USER);
 
-export const initialAuthState: State = {
+export const initialAuthState: AuthState = {
   token: storedToken || null,
-  user: storedUser || null,
+  user: null,
   loading: false,
   error: ''
 };
 
-export const authReducer = (state: State, action: Action) => {
+export const authReducer = (state: AuthState, action: AuthAction) => {
   switch (action.type) {
-    case ActionType.SET_TOKEN_AND_USER:
+    case AuthActionType.SET_TOKEN_AND_USER:
       const token = action?.payload?.token;
       const user = action?.payload?.user;
 
       setItemInLocalStorage(LocalStorageKey.TOKEN, token);
-      setItemInLocalStorage(LocalStorageKey.USER, user);
 
       return {
         token,
@@ -50,20 +48,19 @@ export const authReducer = (state: State, action: Action) => {
         loading: false,
         error: ''
       };
-    case ActionType.SET_LOADING:
+    case AuthActionType.SET_LOADING:
       return {
         ...state,
         loading: true
       };
-    case ActionType.SET_ERROR:
+    case AuthActionType.SET_ERROR:
       return {
         ...state,
         loading: false,
         error: action?.payload?.error
       };
-    case ActionType.RESET_STATE:
+    case AuthActionType.RESET_STATE:
       removeItemFromLocalStorage(LocalStorageKey.TOKEN);
-      removeItemFromLocalStorage(LocalStorageKey.USER);
 
       return {
         ...initialAuthState,

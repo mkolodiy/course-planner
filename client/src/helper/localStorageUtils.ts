@@ -1,6 +1,5 @@
 export enum LocalStorageKey {
-  TOKEN = 'TOKEN',
-  USER = 'USER'
+  TOKEN = 'TOKEN'
 }
 
 export function getItemFromLocalStorage<T>(key: string): T {

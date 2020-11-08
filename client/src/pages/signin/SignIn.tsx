@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import React, { FC, FormEvent, useState } from 'react';
+import { useHistory } from 'react-router';
 import {
   Container,
   Avatar,
@@ -10,11 +11,12 @@ import {
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/auth-context/authContext';
 import styles from './SignIn.module.scss';
-import useAuth from '../../hooks/useAuth';
 
 const Signin: FC = () => {
-  const { signIn } = useAuth();
+  const { signIn, loading, error } = useAuth();
+  const history = useHistory();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,16 +25,20 @@ const Signin: FC = () => {
 
   const handleOnChangePassword = (e: any) => setPassword(e.target.value);
 
-  const handleOnSubmit = (e: FormEvent) => {
+  const handleOnSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('onSubmit', email);
-    console.log('onSubmit', password);
-    signIn({
-      email,
-      password
-    });
-  };
 
+    try {
+      await signIn({
+        email,
+        password
+      });
+      history.push('/courses');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  console.log(error);
   return (
     <Container component="main" maxWidth="xs">
       <div className={styles.signin}>
@@ -55,6 +61,7 @@ const Signin: FC = () => {
             autoFocus
             value={email}
             onChange={handleOnChangeEmail}
+            disabled={loading}
           />
           <TextField
             variant="outlined"
@@ -68,6 +75,7 @@ const Signin: FC = () => {
             autoComplete="current-password"
             value={password}
             onChange={handleOnChangePassword}
+            disabled={loading}
           />
           <Button
             type="submit"
@@ -75,6 +83,7 @@ const Signin: FC = () => {
             variant="contained"
             color="primary"
             className={styles.button}
+            disabled={loading}
           >
             Sign In
           </Button>
