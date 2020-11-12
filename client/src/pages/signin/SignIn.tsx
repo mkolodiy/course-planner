@@ -16,7 +16,7 @@ import { setValidationError } from '../../helper/errorUtils';
 import styles from './SignIn.module.scss';
 
 const Signin: FC = () => {
-  const { signIn, loading, error } = useAuth();
+  const { signIn, loading } = useAuth();
   const { handleSubmit, errors, control, setError } = useForm();
   const history = useHistory();
 
