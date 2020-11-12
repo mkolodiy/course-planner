@@ -26,7 +26,7 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: FC = props => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
-  const { token, user, loading, error } = state;
+  const { token, user } = state;
 
   const handleAuthRequest = async (
     payload: SignInPayload | SignUpPayload,
@@ -45,10 +45,7 @@ const AuthProvider: FC = props => {
         payload: { token, user }
       });
     } catch (err) {
-      dispatch({
-        type: AuthActionType.SET_ERROR,
-        payload: { error: err.message }
-      });
+      throw err.response.data;
     }
   };
 

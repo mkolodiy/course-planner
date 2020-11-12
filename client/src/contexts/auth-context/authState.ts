@@ -4,19 +4,17 @@ import {
   removeItemFromLocalStorage,
   setItemInLocalStorage
 } from '../../helper/localStorageUtils';
-import { User } from '../../types/models';
+import { User, Error } from '../../types/models';
 
 export interface AuthState {
   token?: string | null;
   user?: User | null;
   loading?: boolean;
-  error?: string;
 }
 
 export enum AuthActionType {
   SET_TOKEN_AND_USER = 'SET_TOKEN_AND_USER',
   SET_LOADING = 'SET_LOADING',
-  SET_ERROR = 'SET_ERROR',
   RESET_STATE = 'RESET_STATE'
 }
 
@@ -30,11 +28,13 @@ const storedToken = getItemFromLocalStorage<string>(LocalStorageKey.TOKEN);
 export const initialAuthState: AuthState = {
   token: storedToken || null,
   user: null,
-  loading: false,
-  error: ''
+  loading: false
 };
 
-export const authReducer = (state: AuthState, action: AuthAction) => {
+export const authReducer = (
+  state: AuthState,
+  action: AuthAction
+): AuthState => {
   switch (action.type) {
     case AuthActionType.SET_TOKEN_AND_USER:
       const token = action?.payload?.token;
@@ -45,19 +45,12 @@ export const authReducer = (state: AuthState, action: AuthAction) => {
       return {
         token,
         user,
-        loading: false,
-        error: ''
+        loading: false
       };
     case AuthActionType.SET_LOADING:
       return {
         ...state,
         loading: true
-      };
-    case AuthActionType.SET_ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action?.payload?.error
       };
     case AuthActionType.RESET_STATE:
       removeItemFromLocalStorage(LocalStorageKey.TOKEN);
