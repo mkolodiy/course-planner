@@ -14,9 +14,7 @@ const notFound = (req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
-  res.json({
-    message: err.message
-  });
+  res.json(err);
 };
 
 const authenticateToken = async (req, res, next) => {

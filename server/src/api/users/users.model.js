@@ -54,25 +54,14 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-userSchema.methods.getProperties = function () {
-  return {
-    id: this._id,
-    firstName: this.firstName,
-    lastName: this.lastName,
-    email: this.email,
-    roles: this.roles
-  };
-};
-
-userSchema.methods.getPropertiesForToken = function () {
-  return {
-    id: this._id,
-    roles: this.roles
-  };
-};
-
 userSchema.statics.getRoles = function () {
   return ROLES;
+};
+
+if (!userSchema.options.toObject) userSchema.options.toObject = {};
+userSchema.options.toObject.transform = (doc, ret, options) => {
+  delete ret.password;
+  return ret;
 };
 
 module.exports = mongoose.model('User', userSchema);

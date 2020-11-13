@@ -2,16 +2,27 @@ const supertest = require('supertest');
 const app = require('../../app');
 const User = require('../users/users.model');
 const {
-  emailInUse,
-  userNotExisting,
-  invalidLogin
-} = require('../../common/messages');
+  PASSWORD_INVALID,
+  EMAIL_INVALID,
+  EMAIL_IN_USE
+} = require('../../common/errors');
 
 const testUser = {
   firstName: 'John',
   lastName: 'Doe',
   email: 'john@doe.com',
   password: 'test1234'
+};
+
+const testError = (err, expectedResult) => {
+  const {
+    cause: {
+      name,
+      error: { message }
+    }
+  } = err;
+  expect(name).toEqual(expectedResult.name);
+  expect(message).toEqual(expectedResult.error.message);
 };
 
 describe('POST /api/v1/auth/signup', () => {
@@ -45,8 +56,7 @@ describe('POST /api/v1/auth/signup', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(emailInUse);
+    testError(response.body, EMAIL_IN_USE);
   });
 });
 
@@ -93,8 +103,7 @@ describe('POST /api/v1/auth/signin', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(userNotExisting);
+    testError(response.body, EMAIL_INVALID);
   });
 
   it('should return 403 when user provides wrong password', async () => {
@@ -107,7 +116,6 @@ describe('POST /api/v1/auth/signin', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(invalidLogin);
+    testError(response.body, PASSWORD_INVALID);
   });
 });

@@ -2,10 +2,11 @@ const express = require('express');
 const User = require('../users/users.model');
 const jwt = require('../../common/jwt');
 const {
-  emailInUse,
-  userNotExisting,
-  invalidLogin
-} = require('../../common/messages');
+  ValidationError,
+  EMAIL_INVALID,
+  EMAIL_IN_USE,
+  PASSWORD_INVALID
+} = require('../../common/errors');
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.post('/signup', async (req, res, next) => {
 
     if (userExists) {
       res.status(403);
-      throw new Error(emailInUse);
+      throw new ValidationError(EMAIL_IN_USE);
     }
 
     const user = await User.create({
@@ -25,11 +26,15 @@ router.post('/signup', async (req, res, next) => {
       email,
       password
     });
+    const userObject = user.toObject({
+      versionKey: false
+    });
+    const { _id, roles } = userObject;
 
-    const token = await jwt.sign(user.getPropertiesForToken());
+    const token = await jwt.sign({ _id, roles });
 
     res.json({
-      user: user.getProperties(),
+      user: userObject,
       token
     });
   } catch (err) {
@@ -43,19 +48,24 @@ router.post('/signin', async (req, res, next) => {
     const user = await User.findOne({ email }).exec();
     if (!user) {
       res.status(403);
-      throw new Error(userNotExisting);
+      throw new ValidationError(EMAIL_INVALID);
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       res.status(403);
-      throw new Error(invalidLogin);
+      throw new ValidationError(PASSWORD_INVALID);
     }
 
-    const token = await jwt.sign(user.getPropertiesForToken());
+    const userObject = user.toObject({
+      versionKey: false
+    });
+    const { _id, roles } = userObject;
+
+    const token = await jwt.sign({ _id, roles });
 
     res.json({
-      user: user.getProperties(),
+      user: userObject,
       token
     });
   } catch (err) {
