@@ -105,7 +105,7 @@ const Signin: FC = () => {
             className={styles.button}
             disabled={loading}
           >
-            Sign In
+            Sign in
           </Button>
         </form>
 
