@@ -63,7 +63,6 @@ const Signin: FC = () => {
                 id="email"
                 label="Email Address"
                 autoComplete="email"
-                autoFocus
                 disabled={loading}
                 error={!!errors?.email && !!errors.email?.message}
                 helperText={errors?.email && errors.email?.message}

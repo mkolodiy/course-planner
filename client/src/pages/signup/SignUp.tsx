@@ -61,7 +61,6 @@ const Signup: FC = () => {
                     id="firstName"
                     label="First Name"
                     autoComplete="firstName"
-                    autoFocus
                     disabled={loading}
                     error={!!errors?.firstName && !!errors.firstName?.message}
                     helperText={errors?.firstName && errors.firstName?.message}
@@ -88,7 +87,6 @@ const Signup: FC = () => {
                     id="lastName"
                     label="Last Name"
                     autoComplete="lastName"
-                    autoFocus
                     disabled={loading}
                     error={!!errors?.lastName && !!errors.lastName?.message}
                     helperText={errors?.lastName && errors.lastName?.message}
@@ -119,7 +117,6 @@ const Signup: FC = () => {
                 id="email"
                 label="Email Address"
                 autoComplete="email"
-                autoFocus
                 disabled={loading}
                 error={!!errors?.email && !!errors.email?.message}
                 helperText={errors?.email && errors.email?.message}
@@ -167,7 +164,7 @@ const Signup: FC = () => {
         </form>
 
         <Link to="/signin" className={styles.link}>
-          Already have an account? Sign in
+          Already have an account? Sign In
         </Link>
       </div>
     </Container>
