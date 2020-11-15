@@ -4,7 +4,7 @@ import {
   removeItemFromLocalStorage,
   setItemInLocalStorage
 } from '../../helper/localStorageUtils';
-import { User, Error } from '../../types/models';
+import { User } from '../../types/models';
 
 export interface AuthState {
   token?: string | null;
@@ -14,6 +14,7 @@ export interface AuthState {
 
 export enum AuthActionType {
   SET_TOKEN_AND_USER = 'SET_TOKEN_AND_USER',
+  SET_USER = 'SET_USER',
   SET_LOADING = 'SET_LOADING',
   RESET_STATE = 'RESET_STATE'
 }
@@ -38,13 +39,18 @@ export const authReducer = (
   switch (action.type) {
     case AuthActionType.SET_TOKEN_AND_USER:
       const token = action?.payload?.token;
-      const user = action?.payload?.user;
 
       setItemInLocalStorage(LocalStorageKey.TOKEN, token);
 
       return {
         token,
-        user,
+        user: action?.payload?.user,
+        loading: false
+      };
+    case AuthActionType.SET_USER:
+      return {
+        ...state,
+        user: action?.payload?.user,
         loading: false
       };
     case AuthActionType.SET_LOADING:

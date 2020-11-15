@@ -1,29 +1,43 @@
 import React, { FC } from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import AppProvider from './contexts/app-provider';
 import Courses from './pages/courses';
 import Signin from './pages/signin';
 import Signup from './pages/signup';
+import ProtectedRoute from './components/misc/protected-route/ProtectedRoute';
+
+const routes = [
+  {
+    path: '/signin',
+    component: Signin,
+    isPrivate: false
+  },
+  {
+    path: '/signup',
+    component: Signup,
+    isPrivate: false
+  },
+  {
+    path: '/*',
+    component: Courses,
+    isPrivate: true
+  }
+];
 
 const App: FC = () => (
-  <AppProvider>
+  <>
     <CssBaseline />
     <BrowserRouter>
-      <Switch>
-        <Route path="/signin">
-          <Signin />
-        </Route>
-        <Route path="/signup">
-          <Signup />
-        </Route>
-        <Route path="/courses">
-          <Courses />
-        </Route>
-        <Redirect from="/*" exact to="/courses" />
-      </Switch>
+      <AppProvider>
+        <Switch>
+          {routes.map(route => (
+            <ProtectedRoute key={route.path} {...route} />
+          ))}
+        </Switch>
+      </AppProvider>
     </BrowserRouter>
-  </AppProvider>
+  </>
 );
 
 export default App;
