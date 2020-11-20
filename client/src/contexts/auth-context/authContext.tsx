@@ -45,7 +45,7 @@ const AuthProvider: FC = props => {
             data: { user }
           } = await sendRequest(requestConfig);
           dispatch({ type: AuthActionType.SET_USER, payload: { user } });
-          history.push('/courses');
+          history.push('/');
         } catch (err) {
           dispatch({ type: AuthActionType.RESET_STATE });
           history.push('/signin');

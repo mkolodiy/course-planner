@@ -2,9 +2,10 @@ import React, { FC } from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import AppProvider from './contexts/app-provider';
-import Courses from './pages/courses';
+import Layout from './pages/layout';
 import Signin from './pages/signin';
 import Signup from './pages/signup';
+import Courses from './pages/courses';
 import ProtectedRoute from './components/misc/protected-route/ProtectedRoute';
 
 const routes = [
@@ -19,7 +20,15 @@ const routes = [
     isPrivate: false
   },
   {
-    path: '/*',
+    path: '/',
+    component: Layout,
+    isPrivate: true
+  }
+];
+
+export const subRoutes = [
+  {
+    path: '/',
     component: Courses,
     isPrivate: true
   }
