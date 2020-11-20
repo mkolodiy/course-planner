@@ -2,7 +2,7 @@ const express = require('express');
 const User = require('../users/users.model');
 const jwt = require('../../common/jwt');
 const {
-  ValidationError,
+  CustomError,
   EMAIL_INVALID,
   EMAIL_IN_USE,
   PASSWORD_INVALID
@@ -17,7 +17,7 @@ router.post('/signup', async (req, res, next) => {
 
     if (userExists) {
       res.status(403);
-      throw new ValidationError(EMAIL_IN_USE);
+      throw new CustomError(EMAIL_IN_USE);
     }
 
     const user = await User.create({
@@ -48,13 +48,13 @@ router.post('/signin', async (req, res, next) => {
     const user = await User.findOne({ email }).exec();
     if (!user) {
       res.status(403);
-      throw new ValidationError(EMAIL_INVALID);
+      throw new CustomError(EMAIL_INVALID);
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       res.status(403);
-      throw new ValidationError(PASSWORD_INVALID);
+      throw new CustomError(PASSWORD_INVALID);
     }
 
     const userObject = user.toObject({

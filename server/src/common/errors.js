@@ -8,19 +8,23 @@ const EMAIL_INVALID = {
 const EMAIL_IN_USE = {
   name: 'email',
   error: {
-    message: 'Your email address is invalid. Please try again.'
+    message:
+      'That email address is already in use. Please use a different email address.'
   }
 };
 
 const PASSWORD_INVALID = {
   name: 'password',
   error: {
-    message:
-      'That email address is already in use. Please use a different email address.'
+    message: 'Your password is invalid. Please try again.'
   }
 };
 
-class ValidationError extends Error {
+const USER_NOT_FOUND = 'User not found.';
+
+const TOKEN_INVALID = 'Provided token is not valid.';
+
+class CustomError extends Error {
   constructor(cause) {
     super('ValidationError');
     this.name = 'ValidationError';
@@ -29,8 +33,10 @@ class ValidationError extends Error {
 }
 
 module.exports = {
-  ValidationError,
+  CustomError,
   EMAIL_INVALID,
   EMAIL_IN_USE,
-  PASSWORD_INVALID
+  PASSWORD_INVALID,
+  USER_NOT_FOUND,
+  TOKEN_INVALID
 };

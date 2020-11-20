@@ -1,20 +1,22 @@
 const express = require('express');
 const User = require('../users/users.model');
-const { userNotExisting } = require('../../common/messages');
+const { CustomError, USER_NOT_FOUND } = require('../../common/errors');
 
 const router = express.Router();
 
 router.get('/profile', async (req, res, next) => {
-  const { id } = req.user;
+  const { _id } = req.user;
   try {
-    const user = await User.findById(id).exec();
+    const user = await User.findById(_id).exec();
     if (!user) {
       res.status(403);
-      throw new Error(userNotExisting);
+      throw new CustomError(USER_NOT_FOUND);
     }
 
     res.json({
-      user: user.getProperties()
+      user: user.toObject({
+        versionKey: false
+      })
     });
   } catch (err) {
     next(err);
@@ -22,13 +24,13 @@ router.get('/profile', async (req, res, next) => {
 });
 
 router.post('/profile', async (req, res, next) => {
-  const { id } = req.user;
+  const { _id } = req.user;
   const { firstName, lastName, email, password } = req.body;
   try {
-    const user = await User.findById(id).exec();
+    const user = await User.findById(_id).exec();
     if (!user) {
       res.status(403);
-      throw new Error(userNotExisting);
+      throw new CustomError(USER_NOT_FOUND);
     }
 
     user.firstName = firstName;
@@ -38,7 +40,9 @@ router.post('/profile', async (req, res, next) => {
     const updatedUser = await user.save();
 
     res.json({
-      user: user.getProperties()
+      user: updatedUser.toObject({
+        versionKey: false
+      })
     });
   } catch (err) {
     next(err);

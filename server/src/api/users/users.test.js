@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const app = require('../../app');
 const User = require('./users.model');
-const { userNotExisting, invalidToken } = require('../../common/messages');
+const { USER_NOT_FOUND, TOKEN_INVALID } = require('../../common/errors');
 
 const testUser = {
   firstName: 'John',
@@ -18,6 +18,11 @@ const updatedTestUser = {
 };
 
 let token;
+
+const testError = (err, expectedResult) => {
+  const { cause } = err;
+  expect(cause).toEqual(expectedResult);
+};
 
 describe('GET /api/v1/users/profile', () => {
   beforeEach(async () => {
@@ -53,8 +58,7 @@ describe('GET /api/v1/users/profile', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(invalidToken);
+    testError(response.body, TOKEN_INVALID);
   });
 
   it('should return 403 when user does not exist', async () => {
@@ -65,8 +69,7 @@ describe('GET /api/v1/users/profile', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(userNotExisting);
+    testError(response.body, USER_NOT_FOUND);
   });
 });
 
@@ -106,8 +109,7 @@ describe('POST /api/v1/users/profile', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(invalidToken);
+    testError(response.body, TOKEN_INVALID);
   });
 
   it('should return 403 when user does not exist', async () => {
@@ -119,7 +121,6 @@ describe('POST /api/v1/users/profile', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(userNotExisting);
+    testError(response.body, USER_NOT_FOUND);
   });
 });

@@ -1,10 +1,10 @@
 const {
   createNotFoundMessage,
-  invalidToken,
   accessNotAllowed
 } = require('./common/messages');
 const jwt = require('./common/jwt');
 const User = require('./api/users/users.model');
+const { CustomError, TOKEN_INVALID } = require('./common/errors');
 
 const notFound = (req, res, next) => {
   const error = new Error(createNotFoundMessage(req.originalUrl));
@@ -30,7 +30,7 @@ const authenticateToken = async (req, res, next) => {
     next();
   } catch (err) {
     res.status(403);
-    next(new Error(invalidToken));
+    next(new CustomError(TOKEN_INVALID));
   }
 };
 
@@ -41,7 +41,7 @@ const hasAdminAccess = async (req, res, next) => {
   }
 
   res.status(403);
-  next(new Error(accessNotAllowed));
+  next(new CustomError(accessNotAllowed));
 };
 
 module.exports = {
