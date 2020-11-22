@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
+import { useUser } from '../../contexts/user-context';
 import styles from './Profile.module.scss';
 
 const Profile: FC = () => {
-  return <div>profile</div>;
+  const { user } = useUser();
+  return <div>profile: {JSON.stringify(user)}</div>;
 };
 
 export default Profile;
