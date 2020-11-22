@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import React, { createContext, useReducer, FC, useContext } from 'react';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import LoadingSpinner from '../../components/ui/loading-spinner/LoadingSpinner';
 import { RestApiUrl, HttpMethod, sendRequest } from '../../helper/axios';
 import { SignInPayload, SignUpPayload } from '../../types/payloads';
 import {
@@ -55,7 +56,7 @@ const AuthProvider: FC = props => {
   });
 
   if (!!token && !user && loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner size={100} />;
   }
 
   const handleAuthRequest = async (

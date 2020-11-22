@@ -24,7 +24,7 @@ const Signin: FC = () => {
   const onSubmit = async (data: SignInPayload) => {
     try {
       await signIn(data);
-      history.push('/courses');
+      history.push('/');
     } catch (err) {
       setValidationError(err, setError);
     }

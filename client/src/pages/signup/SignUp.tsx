@@ -24,7 +24,7 @@ const Signup: FC = () => {
   const onSubmit = async (data: SignUpPayload) => {
     try {
       await signUp(data);
-      history.push('/courses');
+      history.push('/');
     } catch (err) {
       setValidationError(err, setError);
     }
