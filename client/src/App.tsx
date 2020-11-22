@@ -6,23 +6,27 @@ import Layout from './pages/layout';
 import Signin from './pages/signin';
 import Signup from './pages/signup';
 import Courses from './pages/courses';
+import Profile from './pages/profile';
 import ProtectedRoute from './components/misc/protected-route/ProtectedRoute';
 
 const routes = [
   {
     path: '/signin',
     component: Signin,
-    isPrivate: false
+    isPrivate: false,
+    exact: true
   },
   {
     path: '/signup',
     component: Signup,
-    isPrivate: false
+    isPrivate: false,
+    exact: true
   },
   {
     path: '/',
     component: Layout,
-    isPrivate: true
+    isPrivate: true,
+    exact: false
   }
 ];
 
@@ -30,7 +34,14 @@ export const subRoutes = [
   {
     path: '/',
     component: Courses,
-    isPrivate: true
+    isPrivate: true,
+    exact: true
+  },
+  {
+    path: '/profile',
+    component: Profile,
+    isPrivate: true,
+    exact: true
   }
 ];
 

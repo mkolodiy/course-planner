@@ -8,9 +8,9 @@ import {
   Typography
 } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
-import styles from './Header.module.scss';
+import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../../contexts/auth-context';
-import { useHistory } from 'react-router-dom';
+import styles from './Header.module.scss';
 
 const Header: FC = () => {
   const { signOut } = useAuth();
@@ -35,7 +35,9 @@ const Header: FC = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" className={styles.title}>
-          Course Planner
+          <Link to="/" className={styles.link}>
+            Course Planner
+          </Link>
         </Typography>
         <div>
           <IconButton
@@ -62,7 +64,11 @@ const Header: FC = () => {
             open={isOpen}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem>
+              <Link to="/profile" className={styles.link}>
+                Profile
+              </Link>
+            </MenuItem>
             <MenuItem onClick={onSignOut}>Sign Out</MenuItem>
           </Menu>
         </div>

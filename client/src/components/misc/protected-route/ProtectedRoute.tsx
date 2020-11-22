@@ -6,12 +6,14 @@ interface Props {
   path: string;
   component: ComponentType;
   isPrivate: boolean;
+  exact: boolean;
 }
 
 const ProtectedRoute: FC<Props> = ({
   path,
   component: Component,
   isPrivate,
+  exact,
   ...rest
 }) => {
   const { isAuthenticated } = useAuth();
@@ -19,6 +21,7 @@ const ProtectedRoute: FC<Props> = ({
   return (
     <Route
       path={path}
+      exact={exact}
       render={() =>
         isPrivate && !isAuthenticated() ? (
           <Redirect to={{ pathname: '/signin' }} />
