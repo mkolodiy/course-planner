@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import React, { createContext, useReducer, FC, useContext } from 'react';
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import LoadingSpinner from '../../components/ui/loading-spinner/LoadingSpinner';
 import { RestApiUrl, HttpMethod, sendRequest } from '../../helper/axios';
 import { SignInPayload, SignUpPayload } from '../../types/payloads';
@@ -25,6 +25,7 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: FC = props => {
   const history = useHistory();
+  const location = useLocation();
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
   const { token, user, loading } = state;
 
@@ -46,7 +47,7 @@ const AuthProvider: FC = props => {
             data: { user }
           } = await sendRequest(requestConfig);
           dispatch({ type: AuthActionType.SET_USER, payload: { user } });
-          history.push('/');
+          history.push(location.pathname);
         } catch (err) {
           dispatch({ type: AuthActionType.RESET_STATE });
           history.push('/signin');
