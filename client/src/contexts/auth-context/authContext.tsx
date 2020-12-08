@@ -76,10 +76,8 @@ const AuthProvider: FC = props => {
         data: { token, user }
       } = await sendRequest(requestConfig);
 
-      dispatch({
-        type: AuthActionType.SET_TOKEN_AND_USER,
-        payload: { token, user }
-      });
+      dispatch({ type: AuthActionType.SET_TOKEN, payload: token });
+      dispatch({ type: AuthActionType.SET_USER, payload: user });
     } catch (err) {
       dispatch({ type: AuthActionType.RESET_STATE });
       throw err.response.data;

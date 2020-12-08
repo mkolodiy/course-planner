@@ -7,7 +7,8 @@ const instance = axios.create({
 export enum RestApiUrl {
   SIGN_IN = 'auth/signin',
   SIGN_UP = 'auth/signup',
-  GET_PROFILE = 'users/profile'
+  GET_PROFILE = 'users/profile',
+  UPDATE_PROFILE = 'users/profile'
 }
 
 export enum HttpMethod {

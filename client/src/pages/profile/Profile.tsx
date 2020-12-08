@@ -7,15 +7,16 @@ import SectionTitle from '../../components/ui/section-title';
 import { User } from '../../types/models';
 import { SignUpPayload } from '../../types/payloads';
 import styles from './Profile.module.scss';
+import { useAuth } from '../../contexts/auth-context';
+import { setValidationError } from '../../helper/errorUtils';
+
+const valueChanged = (oldValue: string, newValue: string) =>
+  newValue && newValue !== '' && newValue !== oldValue;
 
 const Profile: FC = () => {
-  const { user } = useUser();
-  // TODO: Add correct typing
-  const {
-    firstName: oldFirstName,
-    lastName: oldLastName,
-    email: oldEmail
-  } = user as User;
+  const { signOut } = useAuth();
+  const { user, updateProfile } = useUser();
+  const { firstName, lastName, email } = user;
   const { handleSubmit, errors, control, setError } = useForm();
   const [editModeEnabled, setEditModeEnabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -25,14 +26,33 @@ const Profile: FC = () => {
     setEditModeEnabled(true);
   };
 
-  const onSubmit = (payload: SignUpPayload) => {
-    const { firstName, lastName, email, password } = payload;
+  const onSubmit = async (payload: SignUpPayload) => {
+    const {
+      firstName: newFirstName,
+      lastName: newLastName,
+      email: newEmail,
+      password: newPassword
+    } = payload;
 
-    if (password === '') {
+    if (
+      !valueChanged(firstName, newFirstName) &&
+      !valueChanged(lastName, newLastName) &&
+      !valueChanged(email, newEmail)
+    ) {
+      setEditModeEnabled(false);
+      return;
+    }
+
+    if (newPassword && newPassword !== '') {
       delete payload.password;
     }
 
-    setEditModeEnabled(false);
+    try {
+      await updateProfile(payload);
+      signOut();
+    } catch (err) {
+      setValidationError(err, setError);
+    }
   };
 
   return (
@@ -49,7 +69,7 @@ const Profile: FC = () => {
             <Controller
               name="firstName"
               control={control}
-              defaultValue={oldFirstName}
+              defaultValue={firstName}
               rules={{
                 required: 'First name is required'
               }}
@@ -75,7 +95,7 @@ const Profile: FC = () => {
             <Controller
               name="lastName"
               control={control}
-              defaultValue={oldLastName}
+              defaultValue={lastName}
               rules={{
                 required: 'Last name is required'
               }}
@@ -101,7 +121,7 @@ const Profile: FC = () => {
         <Controller
           name="email"
           control={control}
-          defaultValue={oldEmail}
+          defaultValue={email}
           rules={{
             required: 'Email is required',
             pattern: {
