@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import LoadingSpinner from '../../components/ui/loading-spinner/LoadingSpinner';
 import { RestApiUrl, HttpMethod, sendRequest } from '../../helper/axios';
+import { isEmpty } from '../../helper/checkUtils';
 import { SignInPayload, SignUpPayload } from '../../types/payloads';
 import {
   authReducer,
@@ -31,7 +32,7 @@ const AuthProvider: FC = props => {
 
   useEffect(() => {
     (async () => {
-      if (!!token && !user && !loading) {
+      if (!!token && isEmpty(user) && !loading) {
         dispatch({ type: AuthActionType.SET_LOADING });
 
         const requestConfig: AxiosRequestConfig = {
@@ -46,7 +47,8 @@ const AuthProvider: FC = props => {
           const {
             data: { user }
           } = await sendRequest(requestConfig);
-          dispatch({ type: AuthActionType.SET_USER, payload: { user } });
+
+          dispatch({ type: AuthActionType.SET_USER, payload: user });
           history.push(location.pathname);
         } catch (err) {
           dispatch({ type: AuthActionType.RESET_STATE });
@@ -93,7 +95,7 @@ const AuthProvider: FC = props => {
   const signOut = () => dispatch({ type: AuthActionType.RESET_STATE });
 
   const isAuthenticated = () => {
-    return !!token && !!user;
+    return !!token && !isEmpty(user);
   };
 
   return (
