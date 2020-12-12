@@ -1,6 +1,6 @@
 import React, { FC, ComponentType } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from '../../../contexts/auth-context';
+import { useUser } from '../../../contexts/user-context';
 
 interface Props {
   path: string;
@@ -16,14 +16,14 @@ const ProtectedRoute: FC<Props> = ({
   exact,
   ...rest
 }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useUser();
 
   return (
     <Route
       path={path}
       exact={exact}
       render={() =>
-        isPrivate && !isAuthenticated() ? (
+        isPrivate && !isAuthenticated ? (
           <Redirect to={{ pathname: '/signin' }} />
         ) : (
           <Component />

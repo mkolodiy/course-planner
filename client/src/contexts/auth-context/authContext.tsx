@@ -17,7 +17,6 @@ type AuthContextContent = AuthState & {
   signIn: (payload: SignInPayload) => Promise<void>;
   signUp: (payload: SignUpPayload) => Promise<void>;
   signOut: () => void;
-  isAuthenticated: () => boolean;
 };
 
 const AuthContext = createContext<AuthContextContent>({} as AuthContextContent);
@@ -94,13 +93,9 @@ const AuthProvider: FC = props => {
 
   const signOut = () => dispatch({ type: AuthActionType.RESET_STATE });
 
-  const isAuthenticated = () => {
-    return !!token && !isEmpty(user);
-  };
-
   return (
     <AuthContext.Provider
-      value={{ signIn, signUp, signOut, isAuthenticated, ...state }}
+      value={{ signIn, signUp, signOut, ...state }}
       {...props}
     />
   );

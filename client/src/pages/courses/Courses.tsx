@@ -3,8 +3,7 @@ import SectionTitle from '../../components/ui/section-title';
 import { useAuth } from '../../contexts/auth-context/authContext';
 
 const Courses: FC = () => {
-  const { isAuthenticated, user } = useAuth();
-  const authOk = isAuthenticated();
+  const { user } = useAuth();
   return (
     <>
       <SectionTitle title="Courses" />

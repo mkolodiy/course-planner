@@ -7,23 +7,41 @@ import {
   Toolbar,
   Typography
 } from '@material-ui/core';
-import { AccountCircle } from '@material-ui/icons';
+import { AccountBox } from '@material-ui/icons';
+import { SettingsApplications } from '@material-ui/icons';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../../contexts/auth-context';
 import styles from './Header.module.scss';
+import { useUser } from '../../../contexts/user-context';
 
 const Header: FC = () => {
   const { signOut } = useAuth();
+  const { isAdmin } = useUser();
   const history = useHistory();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const isOpen = Boolean(anchorEl);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const [accountAnchorEl, setAccountAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
+  const [settingsAnchorEl, setSettingsAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
+  const isAccountMenuOpen = Boolean(accountAnchorEl);
+  const isSettingsMenuOpen = Boolean(settingsAnchorEl);
+
+  const handleAccountMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAccountAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleAccountMenuClose = () => {
+    setAccountAnchorEl(null);
+  };
+
+  const handleSettingMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setSettingsAnchorEl(event.currentTarget);
+  };
+
+  const handleSettingMenuClose = () => {
+    setSettingsAnchorEl(null);
   };
 
   const onSignOut = () => {
@@ -40,18 +58,52 @@ const Header: FC = () => {
           </Link>
         </Typography>
         <div>
+          {isAdmin && (
+            <>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleSettingMenuOpen}
+                color="inherit"
+              >
+                <SettingsApplications />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={settingsAnchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                open={isSettingsMenuOpen}
+                onClose={handleSettingMenuClose}
+              >
+                <MenuItem>
+                  <Link to="/coursetypes" className={styles.link}>
+                    Course Types
+                  </Link>
+                </MenuItem>
+              </Menu>
+            </>
+          )}
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
-            onClick={handleMenuOpen}
+            onClick={handleAccountMenuOpen}
             color="inherit"
           >
-            <AccountCircle />
+            <AccountBox />
           </IconButton>
           <Menu
             id="menu-appbar"
-            anchorEl={anchorEl}
+            anchorEl={accountAnchorEl}
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'right'
@@ -61,8 +113,8 @@ const Header: FC = () => {
               vertical: 'top',
               horizontal: 'right'
             }}
-            open={isOpen}
-            onClose={handleMenuClose}
+            open={isAccountMenuOpen}
+            onClose={handleAccountMenuClose}
           >
             <MenuItem>
               <Link to="/profile" className={styles.link}>
