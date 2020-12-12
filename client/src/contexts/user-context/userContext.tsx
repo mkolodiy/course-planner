@@ -1,5 +1,4 @@
 import { AxiosRequestConfig } from 'axios';
-import { url } from 'inspector';
 import React, { createContext, FC } from 'react';
 import { useContext } from 'react';
 import { RestApiUrl, HttpMethod, sendRequest } from '../../helper/axios';

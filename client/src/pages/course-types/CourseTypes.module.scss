@@ -1,0 +1,10 @@
+.courseTypes {
+  display: flex;
+  flex-direction: column;
+}
+
+.fabBtn {
+  align-self: flex-end;
+  bottom: 6rem;
+  position: absolute !important;
+}

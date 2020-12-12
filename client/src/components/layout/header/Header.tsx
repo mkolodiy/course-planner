@@ -84,7 +84,7 @@ const Header: FC = () => {
                 open={isSettingsMenuOpen}
                 onClose={handleSettingMenuClose}
               >
-                <MenuItem>
+                <MenuItem onClick={handleSettingMenuClose}>
                   <Link to="/coursetypes" className={styles.link}>
                     Course Types
                   </Link>
@@ -116,7 +116,7 @@ const Header: FC = () => {
             open={isAccountMenuOpen}
             onClose={handleAccountMenuClose}
           >
-            <MenuItem>
+            <MenuItem onClick={handleAccountMenuClose}>
               <Link to="/profile" className={styles.link}>
                 Profile
               </Link>

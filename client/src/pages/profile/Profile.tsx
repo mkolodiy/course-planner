@@ -4,7 +4,6 @@ import { useUser } from '../../contexts/user-context';
 import { Controller, useForm } from 'react-hook-form';
 import { Edit, Save } from '@material-ui/icons';
 import SectionTitle from '../../components/ui/section-title';
-import { User } from '../../types/models';
 import { SignUpPayload } from '../../types/payloads';
 import styles from './Profile.module.scss';
 import { useAuth } from '../../contexts/auth-context';
