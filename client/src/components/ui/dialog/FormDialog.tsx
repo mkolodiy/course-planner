@@ -1,8 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import {
   DialogContent,
-  DialogContentText,
-  TextField,
   DialogActions,
   Button,
   Dialog,
@@ -13,14 +11,18 @@ import {
 import { Close } from '@material-ui/icons';
 import styles from './FormDialog.module.scss';
 
-interface Props {
+export interface FormDialogOptions {
   onClose: () => void;
   onSave: () => void;
-  open: boolean;
   title: string;
+  content: ReactNode;
 }
 
-const FormDialog: FC<Props> = ({ onClose, onSave, open, title }) => {
+interface Props extends FormDialogOptions {
+  open: boolean;
+}
+
+const FormDialog: FC<Props> = ({ onClose, onSave, open, title, content }) => {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
       <DialogTitle disableTypography className={styles.title}>
@@ -35,11 +37,9 @@ const FormDialog: FC<Props> = ({ onClose, onSave, open, title }) => {
           <Close />
         </IconButton>
       </DialogTitle>
-      <DialogContent>
-        <form>tets</form>
-      </DialogContent>
+      <DialogContent>{content}</DialogContent>
       <DialogActions className={styles.actions}>
-        <Button onClick={onClose} variant="contained" color="primary">
+        <Button onClick={onSave} variant="contained" color="primary">
           Create
         </Button>
       </DialogActions>

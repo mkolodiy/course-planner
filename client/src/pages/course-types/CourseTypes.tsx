@@ -1,19 +1,21 @@
-import { Fab, Typography } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
 import React, { FC } from 'react';
-import FormDialog from '../../components/ui/dialog';
+import { DialogTitle, Fab, Typography } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 import SectionTitle from '../../components/ui/section-title';
+import { useDialog } from '../../contexts/dialog-context';
 import styles from './CourseTypes.module.scss';
 
+const TestComponent = React.forwardRef<HTMLDivElement>((props, ref) => (
+  <div ref={ref}>Test</div>
+));
+
 const CourseTypes: FC = () => {
-  const [open, setOpen] = React.useState(false);
+  const { openDialog } = useDialog();
 
   const handleOpenDialog = () => {
-    setOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpen(false);
+    openDialog({
+      content: <TestComponent />
+    });
   };
 
   return (
@@ -22,12 +24,6 @@ const CourseTypes: FC = () => {
       <Typography variant="subtitle1" component="p">
         No courses available
       </Typography>
-      <FormDialog
-        onSave={() => {}}
-        onClose={handleCloseDialog}
-        open={open}
-        title="New course type"
-      />
       <Fab
         color="primary"
         aria-label="Add"
