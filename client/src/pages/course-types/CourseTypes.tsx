@@ -1,20 +1,26 @@
-import React, { FC } from 'react';
-import { DialogTitle, Fab, Typography } from '@material-ui/core';
+import React, { FC, useRef } from 'react';
+import { Fab, Typography } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import SectionTitle from '../../components/ui/section-title';
 import { useDialog } from '../../contexts/dialog-context';
 import styles from './CourseTypes.module.scss';
-
-const TestComponent = React.forwardRef<HTMLDivElement>((props, ref) => (
-  <div ref={ref}>Test</div>
-));
+import AddFormDialog from '../../components/course-types/add-form-dialog/AddFormDialog';
+import { CourseTypePayload } from '../../types/payloads';
 
 const CourseTypes: FC = () => {
   const { openDialog } = useDialog();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const onSubmit = (payload: CourseTypePayload) => {
+    console.log(payload);
+  };
 
   const handleOpenDialog = () => {
     openDialog({
-      content: <TestComponent />
+      onClose: () => console.log('onClose'),
+      onSave: () => console.log('onSave'),
+      title: 'New Course Type',
+      content: <AddFormDialog onSubmit={onSubmit} />
     });
   };
 

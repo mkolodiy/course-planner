@@ -5,8 +5,8 @@ import React, {
   useState,
   ReactElement
 } from 'react';
-import { Dialog, Modal } from '@material-ui/core';
 import { isEmpty } from '../../helper/checkUtils';
+import FormDialog from '../../components/ui/form-dialog';
 
 interface DialogContextContent {
   openDialog: (options: DialogOptions) => void;
@@ -14,6 +14,9 @@ interface DialogContextContent {
 }
 
 export interface DialogOptions {
+  onClose: () => void;
+  onSave: () => void;
+  title: string;
   content: ReactElement;
 }
 
@@ -24,8 +27,8 @@ const DialogContext = createContext<DialogContextContent>(
 export const useDialog = () => useContext(DialogContext);
 
 const DialogProvider: FC = props => {
-  const [dialogOptions, setDialogOptions] = useState<DialogOptions>(
-    {} as DialogOptions
+  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
+    null
   );
 
   const openDialog = (options: DialogOptions) => {
@@ -33,18 +36,25 @@ const DialogProvider: FC = props => {
   };
 
   const closeDialog = () => {
-    setDialogOptions({} as DialogOptions);
+    dialogOptions?.onClose?.();
+    setDialogOptions(null);
   };
 
   return (
     <>
-      <DialogContext.Provider value={{ openDialog, closeDialog }} {...props} />
-      {/* <Modal open={!isEmpty(dialogOptions)} onClose={closeDialog}>
-        {dialogOptions?.content}
-      </Modal> */}
-      <Dialog open={!isEmpty(dialogOptions)} onClose={closeDialog}>
-        {dialogOptions?.content}
-      </Dialog>
+      <DialogContext.Provider value={{ openDialog, closeDialog }} {...props}>
+        {props.children}
+        {!!dialogOptions && (
+          <FormDialog
+            open={!!dialogOptions}
+            onClose={closeDialog}
+            onSave={dialogOptions?.onSave}
+            title={dialogOptions?.title}
+          >
+            {dialogOptions?.content}
+          </FormDialog>
+        )}
+      </DialogContext.Provider>
     </>
   );
 };
