@@ -24,10 +24,21 @@ const USER_NOT_FOUND = 'User not found.';
 
 const TOKEN_INVALID = 'Provided token is not valid.';
 
+const COURSE_TYPE_IN_USE = {
+  name: 'name',
+  error: {
+    message: 'Course type already defined.'
+  }
+};
+
+const ACCESS_NOT_ALLOWED = 'Access not allowed.';
+
+const COURSE_TYPE_DELETED = 'Course type successfully deleted.';
+
 class CustomError extends Error {
   constructor(cause) {
-    super('ValidationError');
-    this.name = 'ValidationError';
+    super('CustomError');
+    this.name = 'CustomError';
     this.cause = cause;
   }
 }
@@ -38,5 +49,8 @@ module.exports = {
   EMAIL_IN_USE,
   PASSWORD_INVALID,
   USER_NOT_FOUND,
-  TOKEN_INVALID
+  TOKEN_INVALID,
+  COURSE_TYPE_IN_USE,
+  ACCESS_NOT_ALLOWED,
+  COURSE_TYPE_DELETED
 };

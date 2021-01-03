@@ -2,11 +2,12 @@ const supertest = require('supertest');
 const app = require('../../app');
 const User = require('../users/users.model');
 const CourseType = require('./courseTypes.model');
+
 const {
-  accessNotAllowed,
-  courseTypeAlreadyDefined,
-  courseTypeDeleted
-} = require('../../common/messages');
+  COURSE_TYPE_IN_USE,
+  ACCESS_NOT_ALLOWED,
+  COURSE_TYPE_DELETED
+} = require('../../common/errors');
 
 const ROLES = User.getRoles();
 
@@ -34,6 +35,16 @@ const testCourseType = {
 
 let trainerToken;
 let adminToken;
+
+const testError = (err, expectedResult) => {
+  const { cause } = err;
+  expect(cause).toEqual(expectedResult);
+
+  if (expectedResult.name && expectedResult.error) {
+    expect(cause.name).toEqual(expectedResult.name);
+    expect(cause.error.message).toEqual(expectedResult.error.message);
+  }
+};
 
 beforeAll(async () => {
   await User.create(trainerTestUser);
@@ -86,8 +97,7 @@ describe('POST /api/v1/coursetypes', () => {
       .expect('Content-Type', /json/)
       .expect(409);
 
-    const message = response.body.message;
-    expect(message).toEqual(courseTypeAlreadyDefined);
+    testError(response.body, COURSE_TYPE_IN_USE);
   });
 
   it('should fail if user is not an admin', async () => {
@@ -98,8 +108,7 @@ describe('POST /api/v1/coursetypes', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(accessNotAllowed);
+    testError(response.body, ACCESS_NOT_ALLOWED);
   });
 });
 
@@ -132,8 +141,7 @@ describe('GET /api/v1/coursetypes', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(accessNotAllowed);
+    testError(response.body, ACCESS_NOT_ALLOWED);
   });
 });
 
@@ -177,7 +185,7 @@ describe('POST /api/v1/coursetypes/:id', () => {
       .expect(409);
 
     const message = response.body.message;
-    expect(message).toEqual(courseTypeAlreadyDefined);
+    testError(response.body, COURSE_TYPE_IN_USE);
   });
 
   it('should fail if user is not an admin', async () => {
@@ -188,8 +196,7 @@ describe('POST /api/v1/coursetypes/:id', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(accessNotAllowed);
+    testError(response.body, ACCESS_NOT_ALLOWED);
   });
 });
 
@@ -198,7 +205,7 @@ describe('DELETE /api/v1/coursetypes/:id', () => {
     await CourseType.deleteMany({});
   });
 
-  it('should return all course types', async () => {
+  it('should delete a course type', async () => {
     const { id } = await CourseType.create(testCourseType);
     await CourseType.create({
       ...testCourseType,
@@ -212,7 +219,7 @@ describe('DELETE /api/v1/coursetypes/:id', () => {
       .expect(200);
 
     const message = deleteResponse.body.message;
-    expect(message).toEqual(courseTypeDeleted);
+    expect(message).toEqual(COURSE_TYPE_DELETED);
 
     const getResponse = await supertest(app)
       .get('/api/v1/coursetypes')
@@ -232,7 +239,6 @@ describe('DELETE /api/v1/coursetypes/:id', () => {
       .expect('Content-Type', /json/)
       .expect(403);
 
-    const message = response.body.message;
-    expect(message).toEqual(accessNotAllowed);
+    testError(response.body, ACCESS_NOT_ALLOWED);
   });
 });

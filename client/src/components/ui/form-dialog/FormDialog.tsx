@@ -16,11 +16,19 @@ interface Props {
   onSave?: () => void;
   title?: string;
   open: boolean;
+  formId: string;
 }
 
-const FormDialog: FC<Props> = ({ onClose, onSave, title, open, children }) => {
+const FormDialog: FC<Props> = ({
+  onClose,
+  onSave,
+  title,
+  open,
+  formId,
+  children
+}) => {
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle disableTypography className={styles.title}>
         <Typography variant="h6" className={styles.titleText}>
           {title}
@@ -36,7 +44,13 @@ const FormDialog: FC<Props> = ({ onClose, onSave, title, open, children }) => {
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions className={styles.actions}>
-        <Button onClick={onSave} variant="contained" color="primary">
+        <Button
+          onClick={onSave}
+          variant="contained"
+          color="primary"
+          form={formId}
+          type="submit"
+        >
           Create
         </Button>
       </DialogActions>

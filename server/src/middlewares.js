@@ -1,10 +1,11 @@
-const {
-  createNotFoundMessage,
-  accessNotAllowed
-} = require('./common/messages');
+const { createNotFoundMessage } = require('./common/messages');
 const jwt = require('./common/jwt');
 const User = require('./api/users/users.model');
-const { CustomError, TOKEN_INVALID } = require('./common/errors');
+const {
+  CustomError,
+  TOKEN_INVALID,
+  ACCESS_NOT_ALLOWED
+} = require('./common/errors');
 
 const notFound = (req, res, next) => {
   const error = new Error(createNotFoundMessage(req.originalUrl));
@@ -41,7 +42,7 @@ const hasAdminAccess = async (req, res, next) => {
   }
 
   res.status(403);
-  next(new CustomError(accessNotAllowed));
+  next(new CustomError(ACCESS_NOT_ALLOWED));
 };
 
 module.exports = {

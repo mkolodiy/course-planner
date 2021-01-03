@@ -5,7 +5,6 @@ import React, {
   useState,
   ReactElement
 } from 'react';
-import { isEmpty } from '../../helper/checkUtils';
 import FormDialog from '../../components/ui/form-dialog';
 
 interface DialogContextContent {
@@ -14,9 +13,10 @@ interface DialogContextContent {
 }
 
 export interface DialogOptions {
-  onClose: () => void;
-  onSave: () => void;
+  onClose?: () => void;
+  onSave?: () => void;
   title: string;
+  formId?: string;
   content: ReactElement;
 }
 
@@ -50,6 +50,7 @@ const DialogProvider: FC = props => {
             onClose={closeDialog}
             onSave={dialogOptions?.onSave}
             title={dialogOptions?.title}
+            formId={dialogOptions?.formId || ''}
           >
             {dialogOptions?.content}
           </FormDialog>

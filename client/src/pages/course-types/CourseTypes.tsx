@@ -4,22 +4,21 @@ import { Add } from '@material-ui/icons';
 import SectionTitle from '../../components/ui/section-title';
 import { useDialog } from '../../contexts/dialog-context';
 import styles from './CourseTypes.module.scss';
-import AddFormDialog from '../../components/course-types/add-form-dialog/AddFormDialog';
+import AddFormDialog from '../../components/course-types/add-form/AddForm';
 import { CourseTypePayload } from '../../types/payloads';
 
 const CourseTypes: FC = () => {
   const { openDialog } = useDialog();
-  const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = (payload: CourseTypePayload) => {
+    console.log('test');
     console.log(payload);
   };
 
   const handleOpenDialog = () => {
     openDialog({
-      onClose: () => console.log('onClose'),
-      onSave: () => console.log('onSave'),
       title: 'New Course Type',
+      formId: 'add-course-type-form',
       content: <AddFormDialog onSubmit={onSubmit} />
     });
   };

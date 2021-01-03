@@ -3,22 +3,26 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField
+  TextField,
+  FormHelperText
 } from '@material-ui/core';
-import React, { FC, Ref } from 'react';
+import React, { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { CourseTypePayload } from '../../../types/payloads';
 
 interface Props {
-  ref?: Ref<HTMLFormElement>;
   onSubmit: (payload: CourseTypePayload) => void;
 }
 
-const AddFormDialog: FC<Props> = ({ ref, onSubmit }) => {
+const AddFormDialog: FC<Props> = ({ onSubmit }) => {
   const { handleSubmit, errors, control } = useForm();
 
   return (
-    <form noValidate onSubmit={handleSubmit(onSubmit)} ref={ref}>
+    <form
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      id="add-course-type-form"
+    >
       <Controller
         name="name"
         control={control}
@@ -42,53 +46,57 @@ const AddFormDialog: FC<Props> = ({ ref, onSubmit }) => {
           />
         )}
       />
-      <Controller
-        name="courseDuration"
-        control={control}
-        defaultValue=""
-        rules={{
-          required: 'Course duration is required'
-        }}
-        render={props => (
-          <FormControl fullWidth variant="outlined" margin="normal" {...props}>
-            <InputLabel id="courseDuration-select-label">
-              Course Duration
-            </InputLabel>
+      <FormControl fullWidth variant="outlined" margin="normal" required>
+        <InputLabel id="courseDuration-select-label">
+          Course Duration
+        </InputLabel>
+        <Controller
+          name="courseDuration"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'Course duration is required'
+          }}
+          render={props => (
             <Select
-              value=""
-              required
               fullWidth
               id="courseDuration"
               labelId="courseDuration-select-label"
               label="Course Duration"
+              error={
+                !!errors?.courseDuration && !!errors.courseDuration?.message
+              }
+              {...props}
             >
               <MenuItem value={1}>1 week</MenuItem>
               <MenuItem value={2}>2 weeks</MenuItem>
               <MenuItem value={3}>3 weeks</MenuItem>
               <MenuItem value={4}>4 weeks</MenuItem>
             </Select>
-          </FormControl>
-        )}
-      />
-      <Controller
-        name="unitDuration"
-        control={control}
-        defaultValue=""
-        rules={{
-          required: 'Unit duration is required'
-        }}
-        render={props => (
-          <FormControl fullWidth variant="outlined" margin="normal" {...props}>
-            <InputLabel id="unitDuration-select-label">
-              Unit Duration
-            </InputLabel>
+          )}
+        />
+        <FormHelperText error={!!errors?.courseDuration} variant="standard">
+          {errors?.courseDuration && errors.courseDuration?.message}
+        </FormHelperText>
+      </FormControl>
+      <FormControl fullWidth variant="outlined" margin="normal">
+        <InputLabel id="unitDuration-select-label">Unit Duration</InputLabel>
+        <Controller
+          name="unitDuration"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'Unit duration is required'
+          }}
+          render={props => (
             <Select
-              value=""
               required
               fullWidth
               id="unitDuration"
               labelId="unitDuration-select-label"
               label="Unit Duration"
+              error={!!errors?.unitDuration && !!errors.unitDuration?.message}
+              {...props}
             >
               <MenuItem value={1}>1 hour</MenuItem>
               <MenuItem value={2}>2 hours</MenuItem>
@@ -97,9 +105,12 @@ const AddFormDialog: FC<Props> = ({ ref, onSubmit }) => {
               <MenuItem value={5}>5 hours</MenuItem>
               <MenuItem value={6}>6 hours</MenuItem>
             </Select>
-          </FormControl>
-        )}
-      />
+          )}
+        />
+        <FormHelperText error={!!errors?.unitDuration} variant="standard">
+          {errors?.unitDuration && errors.unitDuration?.message}
+        </FormHelperText>
+      </FormControl>
     </form>
   );
 };

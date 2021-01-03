@@ -19,21 +19,4 @@ const courseTypeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-courseTypeSchema.methods.getProperties = function () {
-  return {
-    id: this._id,
-    name: this.name,
-    courseDuration: this.courseDuration,
-    unitDuration: this.unitDuration
-  };
-};
-
-courseTypeSchema.statics.getProperties = function (object) {
-  if (Array.isArray(object)) {
-    return object.map(entry => entry.getProperties());
-  }
-
-  return object.getProperties();
-};
-
 module.exports = mongoose.model('CourseType', courseTypeSchema);
