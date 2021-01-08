@@ -1,6 +1,8 @@
 import React, { FC, ComponentType } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useAuth } from '../../../contexts/auth-context';
 import { useUser } from '../../../contexts/user-context';
+import LoadingSpinner from '../../ui/loading-spinner';
 
 interface Props {
   path: string;
@@ -17,8 +19,11 @@ const ProtectedRoute: FC<Props> = ({
   ...rest
 }) => {
   const { isAuthenticated } = useUser();
+  const { loading } = useAuth();
 
-  return (
+  return loading ? (
+    <LoadingSpinner size={100} />
+  ) : (
     <Route
       path={path}
       exact={exact}

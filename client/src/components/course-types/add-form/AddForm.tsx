@@ -8,14 +8,24 @@ import {
 } from '@material-ui/core';
 import React, { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useCourses } from '../../../contexts/course-context';
+import { useDialog } from '../../../contexts/dialog-context';
+import { setValidationError } from '../../../helper/errorUtils';
 import { CourseTypePayload } from '../../../types/payloads';
 
-interface Props {
-  onSubmit: (payload: CourseTypePayload) => void;
-}
+const AddForm: FC = () => {
+  const { handleSubmit, errors, control, setError } = useForm();
+  const { createCourseType } = useCourses();
+  const { closeDialog } = useDialog();
 
-const AddFormDialog: FC<Props> = ({ onSubmit }) => {
-  const { handleSubmit, errors, control } = useForm();
+  const onSubmit = async (data: CourseTypePayload) => {
+    try {
+      await createCourseType(data);
+      closeDialog();
+    } catch (err) {
+      setValidationError(err, setError);
+    }
+  };
 
   return (
     <form
@@ -115,4 +125,4 @@ const AddFormDialog: FC<Props> = ({ onSubmit }) => {
   );
 };
 
-export default AddFormDialog;
+export default AddForm;

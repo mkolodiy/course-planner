@@ -8,7 +8,9 @@ export enum RestApiUrl {
   SIGN_IN = 'auth/signin',
   SIGN_UP = 'auth/signup',
   GET_PROFILE = 'users/profile',
-  UPDATE_PROFILE = 'users/profile'
+  UPDATE_PROFILE = 'users/profile',
+  CREATE_COURSE_TYPE = 'coursetypes',
+  GET_COURSE_TYPE = 'coursetypes'
 }
 
 export enum HttpMethod {

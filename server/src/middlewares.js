@@ -37,6 +37,7 @@ const authenticateToken = async (req, res, next) => {
 
 const hasAdminAccess = async (req, res, next) => {
   const { roles } = req.user;
+
   if (roles.includes(User.getRoles().ADMIN)) {
     return next();
   }

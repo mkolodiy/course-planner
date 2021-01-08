@@ -1,3 +1,16 @@
+export interface Error {
+  name: string;
+}
+
+export interface ValidationError extends Error {
+  cause: {
+    name: string;
+    error: {
+      message: string;
+    };
+  };
+}
+
 export enum Role {
   TRAINER = 'TRAINER',
   ADMIN = 'ADMIN'
@@ -13,15 +26,11 @@ export interface User {
   roles: Role[];
 }
 
-export interface Error {
+export interface CourseType {
+  _id: string;
   name: string;
-}
-
-export interface ValidationError extends Error {
-  cause: {
-    name: string;
-    error: {
-      message: string;
-    };
-  };
+  courseDuration: number;
+  unitDuration: number;
+  createdAt: string;
+  updatedAt: string;
 }

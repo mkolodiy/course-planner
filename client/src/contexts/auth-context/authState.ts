@@ -15,7 +15,7 @@ export interface AuthState {
 export enum AuthActionType {
   SET_TOKEN = 'SET_TOKEN',
   SET_USER = 'SET_USER',
-  SET_LOADING = 'SET_LOADING',
+  START_LOADING = 'START_LOADING',
   RESET_STATE = 'RESET_STATE'
 }
 
@@ -53,7 +53,7 @@ export const authReducer = (
         user: action?.payload as User,
         loading: false
       };
-    case AuthActionType.SET_LOADING:
+    case AuthActionType.START_LOADING:
       return {
         ...state,
         loading: true

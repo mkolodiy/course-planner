@@ -2,7 +2,6 @@ import { AxiosRequestConfig } from 'axios';
 import React, { createContext, useReducer, FC, useContext } from 'react';
 import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import LoadingSpinner from '../../components/ui/loading-spinner/LoadingSpinner';
 import { RestApiUrl, HttpMethod, sendRequest } from '../../helper/axios';
 import { isEmpty } from '../../helper/checkUtils';
 import { SignInPayload, SignUpPayload } from '../../types/payloads';
@@ -32,7 +31,7 @@ const AuthProvider: FC = props => {
   useEffect(() => {
     (async () => {
       if (!!token && isEmpty(user) && !loading) {
-        dispatch({ type: AuthActionType.SET_LOADING });
+        dispatch({ type: AuthActionType.START_LOADING });
 
         const requestConfig: AxiosRequestConfig = {
           method: HttpMethod.GET,
@@ -48,7 +47,13 @@ const AuthProvider: FC = props => {
           } = await sendRequest(requestConfig);
 
           dispatch({ type: AuthActionType.SET_USER, payload: user });
-          history.push(location.pathname);
+
+          if (
+            location.pathname !== '/signin' &&
+            location.pathname !== 'signup'
+          ) {
+            history.push(location.pathname);
+          }
         } catch (err) {
           dispatch({ type: AuthActionType.RESET_STATE });
           history.push('/signin');
@@ -57,15 +62,11 @@ const AuthProvider: FC = props => {
     })();
   });
 
-  if (!!token && !user && loading) {
-    return <LoadingSpinner size={100} />;
-  }
-
   const handleAuthRequest = async (
     payload: SignInPayload | SignUpPayload,
     url: RestApiUrl
   ) => {
-    dispatch({ type: AuthActionType.SET_LOADING });
+    dispatch({ type: AuthActionType.START_LOADING });
 
     try {
       const requestConfig: AxiosRequestConfig = {
