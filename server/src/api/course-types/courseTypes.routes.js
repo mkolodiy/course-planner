@@ -55,8 +55,8 @@ router.post('/:id', async (req, res, next) => {
     body: { name }
   } = req;
   try {
-    const courseTypeExists = await CourseType.exists({ name });
-    if (courseTypeExists) {
+    const courseTypes = await CourseType.find({ name });
+    if (courseTypes.length > 2) {
       res.status(409);
       throw new CustomError(COURSE_TYPE_IN_USE);
     }

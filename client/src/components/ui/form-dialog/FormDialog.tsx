@@ -15,6 +15,7 @@ interface Props {
   onClose?: () => void;
   onSave?: () => void;
   title?: string;
+  closeButtonText?: string;
   open: boolean;
   formId: string;
 }
@@ -23,6 +24,7 @@ const FormDialog: FC<Props> = ({
   onClose,
   onSave,
   title,
+  closeButtonText,
   open,
   formId,
   children
@@ -51,7 +53,7 @@ const FormDialog: FC<Props> = ({
           form={formId}
           type="submit"
         >
-          Create
+          {closeButtonText || 'Create'}
         </Button>
       </DialogActions>
     </Dialog>

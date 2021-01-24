@@ -16,6 +16,7 @@ export interface DialogOptions {
   onClose?: () => void;
   onSave?: () => void;
   title: string;
+  closeButtonText?: string;
   formId?: string;
   content: ReactElement;
 }
@@ -50,6 +51,7 @@ const DialogProvider: FC = props => {
             onClose={closeDialog}
             onSave={dialogOptions?.onSave}
             title={dialogOptions?.title}
+            closeButtonText={dialogOptions?.closeButtonText}
             formId={dialogOptions?.formId || ''}
           >
             {dialogOptions?.content}
