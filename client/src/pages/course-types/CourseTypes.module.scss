@@ -1,6 +1,10 @@
 .courseTypes {
   display: flex;
   flex-direction: column;
+
+  th {
+    font-weight: 600;
+  }
 }
 
 .fabBtn {

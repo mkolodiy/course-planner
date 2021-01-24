@@ -11,16 +11,22 @@ import { Controller, useForm } from 'react-hook-form';
 import { useCourses } from '../../../contexts/course-context';
 import { useDialog } from '../../../contexts/dialog-context';
 import { setValidationError } from '../../../helper/errorUtils';
+import { CourseType } from '../../../types/models';
 import { CourseTypePayload } from '../../../types/payloads';
 
-const AddForm: FC = () => {
+interface Props {
+  onSubmit: (data: CourseTypePayload) => void;
+  courseType?: CourseType;
+}
+
+const AddForm: FC<Props> = ({ onSubmit, courseType }) => {
   const { handleSubmit, errors, control, setError } = useForm();
-  const { createCourseType } = useCourses();
+
   const { closeDialog } = useDialog();
 
-  const onSubmit = async (data: CourseTypePayload) => {
+  const handleSubmitCb = async (data: CourseTypePayload) => {
     try {
-      await createCourseType(data);
+      await onSubmit(data);
       closeDialog();
     } catch (err) {
       setValidationError(err, setError);
@@ -30,13 +36,13 @@ const AddForm: FC = () => {
   return (
     <form
       noValidate
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleSubmitCb)}
       id="add-course-type-form"
     >
       <Controller
         name="name"
         control={control}
-        defaultValue=""
+        defaultValue={courseType?.name || ''}
         rules={{
           required: 'Name is required'
         }}
@@ -63,7 +69,7 @@ const AddForm: FC = () => {
         <Controller
           name="courseDuration"
           control={control}
-          defaultValue=""
+          defaultValue={courseType?.courseDuration || ''}
           rules={{
             required: 'Course duration is required'
           }}
@@ -94,7 +100,7 @@ const AddForm: FC = () => {
         <Controller
           name="unitDuration"
           control={control}
-          defaultValue=""
+          defaultValue={courseType?.courseDuration || ''}
           rules={{
             required: 'Unit duration is required'
           }}

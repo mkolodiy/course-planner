@@ -10,12 +10,15 @@ export enum RestApiUrl {
   GET_PROFILE = 'users/profile',
   UPDATE_PROFILE = 'users/profile',
   CREATE_COURSE_TYPE = 'coursetypes',
+  UPDATE_COURSE_TYPE = 'coursetypes',
+  DELETE_COURSE_TYPE = 'coursetypes',
   GET_COURSE_TYPE = 'coursetypes'
 }
 
 export enum HttpMethod {
   GET = 'GET',
-  POST = 'POST'
+  POST = 'POST',
+  DELETE = 'DELETE'
 }
 
 export const sendRequest = (config: AxiosRequestConfig) => {
