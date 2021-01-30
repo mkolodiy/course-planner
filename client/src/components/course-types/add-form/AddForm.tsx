@@ -8,7 +8,6 @@ import {
 } from '@material-ui/core';
 import React, { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useCourses } from '../../../contexts/course-context';
 import { useDialog } from '../../../contexts/dialog-context';
 import { setValidationError } from '../../../helper/errorUtils';
 import { CourseType } from '../../../types/models';

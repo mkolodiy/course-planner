@@ -15,7 +15,7 @@ import SectionTitle from '../../components/ui/section-title';
 import { useDialog } from '../../contexts/dialog-context';
 import styles from './CourseTypes.module.scss';
 import AddForm from '../../components/course-types/add-form/AddForm';
-import { useCourses } from '../../contexts/course-context';
+import { useCourseTypes } from '../../contexts/course-types-context';
 import LoadingSpinner from '../../components/ui/loading-spinner';
 import { isEmpty } from '../../helper/checkUtils';
 import { CourseTypePayload } from '../../types/payloads';
@@ -30,7 +30,7 @@ const CourseTypes: FC = () => {
     getCourseTypes,
     courseTypes,
     loading
-  } = useCourses();
+  } = useCourseTypes();
 
   useEffect(() => {
     (async () => {

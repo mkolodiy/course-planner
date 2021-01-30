@@ -1,11 +1,11 @@
 import { CourseType } from '../../types/models';
 
-export interface CoursesState {
+export interface CourseTypesState {
   courseTypes: CourseType[];
   loading: boolean;
 }
 
-export enum CoursesActionType {
+export enum CourseTypesActionType {
   ADD_COURSE_TYPE = 'ADD_COURSE_TYPE',
   UPDATE_COURSE_TYPE = 'UPDATE_COURSE_TYPE',
   DELETE_COURSE_TYPE = 'DELETE_COURSE_TYPE',
@@ -13,22 +13,22 @@ export enum CoursesActionType {
   SET_LOADING = 'SET_LOADING'
 }
 
-interface CoursesAction {
-  type: CoursesActionType;
+export interface CourseTypesAction {
+  type: CourseTypesActionType;
   payload?: unknown;
 }
 
-export const initialCoursesState: CoursesState = {
+export const initialCourseTypesState: CourseTypesState = {
   courseTypes: [],
   loading: false
 };
 
-export const coursesReducer = (
-  state: CoursesState,
-  action: CoursesAction
-): CoursesState => {
+export const courseTypesReducer = (
+  state: CourseTypesState,
+  action: CourseTypesAction
+): CourseTypesState => {
   switch (action.type) {
-    case CoursesActionType.ADD_COURSE_TYPE: {
+    case CourseTypesActionType.ADD_COURSE_TYPE: {
       const courseType = action?.payload as CourseType;
       const { courseTypes } = state;
 
@@ -38,7 +38,7 @@ export const coursesReducer = (
         loading: false
       };
     }
-    case CoursesActionType.UPDATE_COURSE_TYPE: {
+    case CourseTypesActionType.UPDATE_COURSE_TYPE: {
       const courseType = action?.payload as CourseType;
       const courseTypes = [...state.courseTypes];
       const itemIndex = courseTypes.findIndex(
@@ -52,7 +52,7 @@ export const coursesReducer = (
         loading: false
       };
     }
-    case CoursesActionType.DELETE_COURSE_TYPE: {
+    case CourseTypesActionType.DELETE_COURSE_TYPE: {
       const courseTypeId = action?.payload as string;
       const courseTypes = [...state.courseTypes];
       const itemIndex = courseTypes.findIndex(
@@ -66,14 +66,14 @@ export const coursesReducer = (
         loading: false
       };
     }
-    case CoursesActionType.SET_COURSE_TYPES: {
+    case CourseTypesActionType.SET_COURSE_TYPES: {
       return {
         ...state,
         courseTypes: action?.payload as CourseType[],
         loading: false
       };
     }
-    case CoursesActionType.SET_LOADING: {
+    case CourseTypesActionType.SET_LOADING: {
       return {
         ...state,
         loading: action?.payload as boolean

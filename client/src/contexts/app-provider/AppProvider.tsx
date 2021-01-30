@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import AuthProvider from '../auth-context';
-import CoursesProvider from '../course-context';
+import CourseTypesProvider from '../course-types-context';
 import DialogProvider from '../dialog-context/dialogContext';
 import UserProvider from '../user-context/userContext';
 
 const AppProvider: FC = ({ children }) => (
   <AuthProvider>
     <UserProvider>
-      <CoursesProvider>
+      <CourseTypesProvider>
         <DialogProvider>{children}</DialogProvider>
-      </CoursesProvider>
+      </CourseTypesProvider>
     </UserProvider>
   </AuthProvider>
 );

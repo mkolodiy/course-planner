@@ -4,31 +4,34 @@ import { HttpMethod, RestApiUrl, sendRequest } from '../../helper/axios';
 import { CourseTypePayload } from '../../types/payloads';
 import { useAuth } from '../auth-context';
 import {
-  CoursesActionType,
-  coursesReducer,
-  CoursesState,
-  initialCoursesState
-} from './coursesState';
+  CourseTypesActionType,
+  courseTypesReducer,
+  CourseTypesState,
+  initialCourseTypesState
+} from './courseTypesState';
 
-type CoursesContextContent = CoursesState & {
+type CourseTypesContextContent = CourseTypesState & {
   createCourseType: (payload: CourseTypePayload) => Promise<void>;
   updateCourseType: (id: string, payload: CourseTypePayload) => Promise<void>;
   deleteCourseType: (id: string) => Promise<void>;
   getCourseTypes: () => Promise<void>;
 };
 
-const CoursesContext = createContext<CoursesContextContent>(
-  {} as CoursesContextContent
+const CourseTypesContext = createContext<CourseTypesContextContent>(
+  {} as CourseTypesContextContent
 );
 
-export const useCourses = () => useContext(CoursesContext);
+export const useCourseTypes = () => useContext(CourseTypesContext);
 
-const CoursesProvider: FC = props => {
-  const [state, dispatch] = useReducer(coursesReducer, initialCoursesState);
+const CourseTypesProvider: FC = props => {
+  const [state, dispatch] = useReducer(
+    courseTypesReducer,
+    initialCourseTypesState
+  );
   const { token } = useAuth();
 
   const createCourseType = async (payload: CourseTypePayload) => {
-    dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
+    dispatch({ type: CourseTypesActionType.SET_LOADING, payload: true });
 
     try {
       const requestConfig: AxiosRequestConfig = {
@@ -44,17 +47,17 @@ const CoursesProvider: FC = props => {
       } = await sendRequest(requestConfig);
 
       dispatch({
-        type: CoursesActionType.ADD_COURSE_TYPE,
+        type: CourseTypesActionType.ADD_COURSE_TYPE,
         payload: courseType
       });
     } catch (err) {
-      dispatch({ type: CoursesActionType.SET_LOADING, payload: false });
+      dispatch({ type: CourseTypesActionType.SET_LOADING, payload: false });
       throw err.response.data;
     }
   };
 
   const updateCourseType = async (id: string, payload: CourseTypePayload) => {
-    dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
+    dispatch({ type: CourseTypesActionType.SET_LOADING, payload: true });
 
     try {
       const requestConfig: AxiosRequestConfig = {
@@ -70,17 +73,17 @@ const CoursesProvider: FC = props => {
       } = await sendRequest(requestConfig);
 
       dispatch({
-        type: CoursesActionType.UPDATE_COURSE_TYPE,
+        type: CourseTypesActionType.UPDATE_COURSE_TYPE,
         payload: courseType
       });
     } catch (err) {
-      dispatch({ type: CoursesActionType.SET_LOADING, payload: false });
+      dispatch({ type: CourseTypesActionType.SET_LOADING, payload: false });
       throw err.response.data;
     }
   };
 
   const deleteCourseType = async (id: string) => {
-    dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
+    dispatch({ type: CourseTypesActionType.SET_LOADING, payload: true });
 
     try {
       const requestConfig: AxiosRequestConfig = {
@@ -95,17 +98,17 @@ const CoursesProvider: FC = props => {
       } = await sendRequest(requestConfig);
 
       dispatch({
-        type: CoursesActionType.DELETE_COURSE_TYPE,
+        type: CourseTypesActionType.DELETE_COURSE_TYPE,
         payload: id
       });
     } catch (err) {
-      dispatch({ type: CoursesActionType.SET_LOADING, payload: false });
+      dispatch({ type: CourseTypesActionType.SET_LOADING, payload: false });
       throw err.response.data;
     }
   };
 
   const getCourseTypes = async () => {
-    dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
+    dispatch({ type: CourseTypesActionType.SET_LOADING, payload: true });
 
     try {
       const requestConfig: AxiosRequestConfig = {
@@ -120,17 +123,17 @@ const CoursesProvider: FC = props => {
       } = await sendRequest(requestConfig);
 
       dispatch({
-        type: CoursesActionType.SET_COURSE_TYPES,
+        type: CourseTypesActionType.SET_COURSE_TYPES,
         payload: courseTypes
       });
     } catch (err) {
-      dispatch({ type: CoursesActionType.SET_LOADING, payload: false });
+      dispatch({ type: CourseTypesActionType.SET_LOADING, payload: false });
       throw err.response.data;
     }
   };
 
   return (
-    <CoursesContext.Provider
+    <CourseTypesContext.Provider
       value={{
         createCourseType,
         updateCourseType,
@@ -143,4 +146,4 @@ const CoursesProvider: FC = props => {
   );
 };
 
-export default CoursesProvider;
+export default CourseTypesProvider;
