@@ -61,9 +61,9 @@ const CourseTypes: FC = () => {
     });
   };
 
-  const handledDeleteCourseType = (courseType: CourseType) => () => {
+  const handledDeleteCourseType = (courseType: CourseType) => async () => {
     const { _id } = courseType;
-    deleteCourseType(_id);
+    await deleteCourseType(_id);
   };
 
   const body = loading ? (

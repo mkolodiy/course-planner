@@ -1,11 +1,11 @@
 const express = require('express');
-const { courseDeleted } = require('../../common/messages');
+const { COURSE_DELETED } = require('../../common/errors');
 const Course = require('./courses.model');
 
 const router = express.Router();
 
 router.post('/', async (req, res, next) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   const { name, type, startDate, endDate } = req.body;
   try {
     const course = await Course.create({
@@ -16,8 +16,11 @@ router.post('/', async (req, res, next) => {
       user: userId
     });
 
+    await course.populate('type').execPopulate();
     res.json({
-      course: await course.getProperties()
+      course: course.toObject({
+        versionKey: false
+      })
     });
   } catch (err) {
     res.status(400);
@@ -26,11 +29,15 @@ router.post('/', async (req, res, next) => {
 });
 
 router.get('/', async (req, res, next) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   try {
     const courses = await Course.find({ user: userId });
     res.json({
-      courses: await Course.getProperties(courses)
+      courses: courses.map(course =>
+        course.toObject({
+          versionKey: false
+        })
+      )
     });
   } catch (err) {
     next(err);
@@ -46,7 +53,9 @@ router.post('/:id', async (req, res, next) => {
     }).exec();
 
     res.json({
-      course: await course.getProperties()
+      course: course.toObject({
+        versionKey: false
+      })
     });
   } catch (err) {
     next(err);
@@ -57,9 +66,11 @@ router.get('/:id', async (req, res, next) => {
   const id = req.params.id;
   try {
     const course = await Course.findById(id).exec();
-
+    await course.populate('type').execPopulate();
     res.json({
-      course: await course.getProperties()
+      course: course.toObject({
+        versionKey: false
+      })
     });
   } catch (err) {
     console.log(err);
@@ -73,7 +84,7 @@ router.delete('/:id', async (req, res, next) => {
     await Course.findByIdAndDelete(id).exec();
 
     res.json({
-      message: courseDeleted
+      message: COURSE_DELETED
     });
   } catch (err) {
     next(err);

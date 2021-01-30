@@ -3,7 +3,7 @@ const app = require('../../app');
 const User = require('../users/users.model');
 const CourseType = require('../course-types/courseTypes.model');
 const Course = require('./courses.model');
-const { courseDeleted } = require('../../common/messages');
+const { COURSE_DELETED } = require('../../common/errors');
 
 const ROLES = User.getRoles();
 
@@ -29,12 +29,11 @@ const testCourseType = {
   unitDuration: 4
 };
 
-const createTestCourse = (courseTypeId, userId) => ({
+const createTestCourse = courseTypeId => ({
   name: 'Test course',
   type: courseTypeId,
   startDate: new Date(),
-  endDate: new Date(),
-  user: userId
+  endDate: new Date()
 });
 
 let trainerToken;
@@ -73,10 +72,7 @@ describe('POST /api/v1/courses', () => {
   });
 
   it('should create a course', async () => {
-    const testCourse = createTestCourse(
-      courseType.getProperties().id,
-      user.getProperties().id
-    );
+    const testCourse = createTestCourse(courseType._id);
     const response = await supertest(app)
       .post('/api/v1/courses')
       .set('Authorization', `Bearer ${trainerToken}`)
@@ -92,10 +88,7 @@ describe('POST /api/v1/courses', () => {
   });
 
   it('should failed if required properties are missing', async () => {
-    const testCourse = createTestCourse(
-      courseType.getProperties().id,
-      user.getProperties().id
-    );
+    const testCourse = createTestCourse(courseType._id);
     delete testCourse.type;
     const response = await supertest(app)
       .post('/api/v1/courses')
@@ -115,16 +108,10 @@ describe('GET /api/v1/courses', () => {
   });
 
   it('should get all courses for a given user', async () => {
-    const testCourse1 = createTestCourse(
-      courseType.getProperties().id,
-      user.getProperties().id
-    );
-    const testCourse2 = createTestCourse(
-      courseType.getProperties().id,
-      user.getProperties().id
-    );
-    await Course.create(testCourse1);
-    await Course.create(testCourse2);
+    const testCourse1 = createTestCourse(courseType._id);
+    const testCourse2 = createTestCourse(courseType._id);
+    await Course.create({ ...testCourse1, user: user._id });
+    await Course.create({ ...testCourse2, user: user._id });
 
     const response = await supertest(app)
       .get('/api/v1/courses')
@@ -137,7 +124,7 @@ describe('GET /api/v1/courses', () => {
     const firstCourse = courses[0];
     expect(firstCourse.name).toBe(testCourse1.name);
     const secondCourse = courses[0];
-    expect(secondCourse.name).toBe(secondCourse.name);
+    expect(secondCourse.name).toBe(testCourse2.name);
   });
 });
 
@@ -153,11 +140,8 @@ describe('POST /api/v1/courses/:id', () => {
   });
 
   it('should update course and return updated course', async () => {
-    const testCourse = createTestCourse(
-      courseType.getProperties().id,
-      user.getProperties().id
-    );
-    const { id } = await Course.create(testCourse);
+    const testCourse = createTestCourse(courseType._id);
+    const { id } = await Course.create({ ...testCourse, user: user._id });
 
     const response = await supertest(app)
       .post(`/api/v1/courses/${id}`)
@@ -179,11 +163,8 @@ describe('GET /api/v1/courses/:id', () => {
   });
 
   it('should return course by the given id', async () => {
-    const testCourse = createTestCourse(
-      courseType.getProperties().id,
-      user.getProperties().id
-    );
-    const { id } = await Course.create(testCourse);
+    const testCourse = createTestCourse(courseType._id);
+    const { id } = await Course.create({ ...testCourse, user: user._id });
 
     const response = await supertest(app)
       .get(`/api/v1/courses/${id}`)
@@ -205,11 +186,8 @@ describe('GET /api/v1/courses/:id', () => {
   });
 
   it('should delete course and return a success message', async () => {
-    const testCourse = createTestCourse(
-      courseType.getProperties().id,
-      user.getProperties().id
-    );
-    const { id } = await Course.create(testCourse);
+    const testCourse = createTestCourse(courseType._id);
+    const { id } = await Course.create({ ...testCourse, user: user._id });
 
     const response = await supertest(app)
       .delete(`/api/v1/courses/${id}`)
@@ -218,6 +196,6 @@ describe('GET /api/v1/courses/:id', () => {
       .expect(200);
 
     const message = response.body.message;
-    expect(message).toEqual(courseDeleted);
+    expect(message).toEqual(COURSE_DELETED);
   });
 });

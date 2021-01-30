@@ -35,6 +35,8 @@ const ACCESS_NOT_ALLOWED = 'Access not allowed.';
 
 const COURSE_TYPE_DELETED = 'Course type successfully deleted.';
 
+const COURSE_DELETED = 'Course successfully deleted.';
+
 class CustomError extends Error {
   constructor(cause) {
     super('CustomError');
@@ -52,5 +54,6 @@ module.exports = {
   TOKEN_INVALID,
   COURSE_TYPE_IN_USE,
   ACCESS_NOT_ALLOWED,
-  COURSE_TYPE_DELETED
+  COURSE_TYPE_DELETED,
+  COURSE_DELETED
 };

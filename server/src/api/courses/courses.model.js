@@ -43,25 +43,4 @@ const courseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-courseSchema.methods.getProperties = async function () {
-  const courseType = await CourseType.findById(this.type).exec();
-  return {
-    id: this._id,
-    name: this.name,
-    type: courseType.getProperties(),
-    startDate: this.startDate,
-    endDate: this.endDate
-  };
-};
-
-courseSchema.statics.getProperties = async function (object) {
-  if (Array.isArray(object)) {
-    return await Promise.all(
-      object.map(async entry => await entry.getProperties())
-    );
-  }
-
-  return await object.getProperties();
-};
-
 module.exports = mongoose.model('Course', courseSchema);
