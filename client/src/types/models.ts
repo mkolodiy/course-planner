@@ -34,3 +34,11 @@ export interface CourseType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Course {
+  _id: string;
+  name: string;
+  type: CourseType;
+  startDate: string;
+  endDate: string;
+}
