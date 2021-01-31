@@ -70,7 +70,7 @@ const CourseTypes: FC = () => {
     <LoadingSpinner size={100} />
   ) : isEmpty(courseTypes) ? (
     <Typography variant="subtitle1" component="p">
-      No courses available
+      No course types available
     </Typography>
   ) : (
     <TableContainer>

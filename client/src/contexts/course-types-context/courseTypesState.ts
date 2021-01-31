@@ -31,6 +31,7 @@ export const courseTypesReducer = (
     case CourseTypesActionType.ADD_COURSE_TYPE: {
       const courseType = action?.payload as CourseType;
       const { courseTypes } = state;
+      console.log(courseTypes);
 
       return {
         ...state,

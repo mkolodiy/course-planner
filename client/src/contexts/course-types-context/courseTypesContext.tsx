@@ -111,7 +111,7 @@ const CourseTypesProvider: FC = props => {
     try {
       const requestConfig: AxiosRequestConfig = {
         method: HttpMethod.GET,
-        url: RestApiUrl.GET_COURSE_TYPE,
+        url: RestApiUrl.GET_COURSE_TYPES,
         headers: {
           authorization: `Bearer: ${token}`
         }

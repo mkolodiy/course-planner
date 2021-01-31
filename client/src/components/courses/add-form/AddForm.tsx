@@ -6,22 +6,29 @@ import {
   TextField,
   FormHelperText
 } from '@material-ui/core';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useCourseTypes } from '../../../contexts/course-types-context';
 import { useDialog } from '../../../contexts/dialog-context';
 import { setValidationError } from '../../../helper/errorUtils';
-import { CourseTypePayload } from '../../../types/payloads';
+import { CoursePayload } from '../../../types/payloads';
 
 interface Props {
-  onSubmit: (data: CourseTypePayload) => void;
+  onSubmit: (data: CoursePayload) => void;
 }
 
 const AddForm: FC<Props> = ({ onSubmit }) => {
   const { handleSubmit, errors, control, setError } = useForm();
-
+  const { getCourseTypes, courseTypes } = useCourseTypes();
   const { closeDialog } = useDialog();
 
-  const handleSubmitCb = async (data: CourseTypePayload) => {
+  useEffect(() => {
+    (async () => {
+      await getCourseTypes();
+    })();
+  }, []);
+
+  const handleSubmitCb = async (data: CoursePayload) => {
     try {
       await onSubmit(data);
       closeDialog();
@@ -77,10 +84,11 @@ const AddForm: FC<Props> = ({ onSubmit }) => {
               error={!!errors?.type && !!errors.type?.message}
               {...props}
             >
-              <MenuItem value={1}>1 week</MenuItem>
-              <MenuItem value={2}>2 weeks</MenuItem>
-              <MenuItem value={3}>3 weeks</MenuItem>
-              <MenuItem value={4}>4 weeks</MenuItem>
+              {courseTypes.map(courseType => (
+                <MenuItem value={courseType._id} key={courseType._id}>
+                  {courseType.name}
+                </MenuItem>
+              ))}
             </Select>
           )}
         />

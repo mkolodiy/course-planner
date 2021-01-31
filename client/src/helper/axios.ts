@@ -12,7 +12,7 @@ export enum RestApiUrl {
   CREATE_COURSE_TYPE = 'coursetypes',
   UPDATE_COURSE_TYPE = 'coursetypes',
   DELETE_COURSE_TYPES = 'coursetypes',
-  GET_COURSE_TYPE = 'courses',
+  GET_COURSE_TYPES = 'coursetypes',
   CREATE_COURSE = 'courses',
   UPDATE_COURSE = 'courses',
   DELETE_COURSE = 'courses',

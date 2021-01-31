@@ -23,7 +23,7 @@ const CourseContext = createContext<CoursesContextContent>(
 
 export const useCourses = () => useContext(CourseContext);
 
-const CourseProvider: FC = props => {
+const CoursesProvider: FC = props => {
   const [state, dispatch] = useReducer(coursesReducer, initialCoursesState);
   const { token } = useAuth();
 
@@ -108,7 +108,7 @@ const CourseProvider: FC = props => {
     try {
       const requestConfig: AxiosRequestConfig = {
         method: HttpMethod.GET,
-        url: RestApiUrl.GET_COURSE_TYPE,
+        url: RestApiUrl.GET_COURSES,
         headers: {
           authorization: `Bearer: ${token}`
         }
@@ -141,4 +141,4 @@ const CourseProvider: FC = props => {
   );
 };
 
-export default CourseProvider;
+export default CoursesProvider;
