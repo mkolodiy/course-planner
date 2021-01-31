@@ -11,8 +11,12 @@ export enum RestApiUrl {
   UPDATE_PROFILE = 'users/profile',
   CREATE_COURSE_TYPE = 'coursetypes',
   UPDATE_COURSE_TYPE = 'coursetypes',
-  DELETE_COURSE_TYPE = 'coursetypes',
-  GET_COURSE_TYPE = 'coursetypes'
+  DELETE_COURSE_TYPES = 'coursetypes',
+  GET_COURSE_TYPE = 'courses',
+  CREATE_COURSE = 'courses',
+  UPDATE_COURSE = 'courses',
+  DELETE_COURSE = 'courses',
+  GET_COURSES = 'courses'
 }
 
 export enum HttpMethod {

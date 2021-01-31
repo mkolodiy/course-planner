@@ -13,3 +13,10 @@ export interface CourseTypePayload {
   courseDuration: number;
   unitDuration: number;
 }
+
+export interface CoursePayload {
+  name: string;
+  type: string;
+  startDate: string;
+  endDate: string;
+}

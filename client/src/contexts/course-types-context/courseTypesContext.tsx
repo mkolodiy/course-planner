@@ -88,14 +88,12 @@ const CourseTypesProvider: FC = props => {
     try {
       const requestConfig: AxiosRequestConfig = {
         method: HttpMethod.DELETE,
-        url: RestApiUrl.DELETE_COURSE_TYPE + '/' + id,
+        url: RestApiUrl.DELETE_COURSE_TYPES + '/' + id,
         headers: {
           authorization: `Bearer: ${token}`
         }
       };
-      const {
-        data: { courseType }
-      } = await sendRequest(requestConfig);
+      await sendRequest(requestConfig);
 
       dispatch({
         type: CourseTypesActionType.DELETE_COURSE_TYPE,
