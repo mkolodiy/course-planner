@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react';
 import {
   Fab,
   IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -73,43 +74,45 @@ const CourseTypes: FC = () => {
       No course types available
     </Typography>
   ) : (
-    <TableContainer>
-      <Table aria-label="Course types table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Course duration&nbsp;(weeks)</TableCell>
-            <TableCell>Unit duration&nbsp;(hours)</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {courseTypes.map(courseType => (
-            <TableRow key={courseType._id}>
-              <TableCell>{courseType.name}</TableCell>
-              <TableCell>{courseType.courseDuration}</TableCell>
-              <TableCell>{courseType.unitDuration}</TableCell>
-              <TableCell>
-                <IconButton
-                  aria-label="Edit"
-                  size="small"
-                  onClick={handleEditCourseType(courseType)}
-                >
-                  <Edit />
-                </IconButton>
-                <IconButton
-                  aria-label="Delete"
-                  size="small"
-                  onClick={handledDeleteCourseType(courseType)}
-                >
-                  <Delete />
-                </IconButton>
-              </TableCell>
+    <Paper variant="outlined">
+      <TableContainer>
+        <Table aria-label="Course types table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Course duration&nbsp;(weeks)</TableCell>
+              <TableCell>Unit duration&nbsp;(hours)</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {courseTypes.map(courseType => (
+              <TableRow key={courseType._id}>
+                <TableCell>{courseType.name}</TableCell>
+                <TableCell>{courseType.courseDuration}</TableCell>
+                <TableCell>{courseType.unitDuration}</TableCell>
+                <TableCell>
+                  <IconButton
+                    aria-label="Edit"
+                    size="small"
+                    onClick={handleEditCourseType(courseType)}
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton
+                    aria-label="Delete"
+                    size="small"
+                    onClick={handledDeleteCourseType(courseType)}
+                  >
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 
   return (

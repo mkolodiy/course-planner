@@ -41,4 +41,7 @@ export interface Course {
   type: CourseType;
   startDate: string;
   endDate: string;
+  participants: string[];
+  user: string;
+  worklogs: string[];
 }

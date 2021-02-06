@@ -2,6 +2,7 @@ import { Fab, Typography } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import React, { FC, useEffect } from 'react';
 import AddForm from '../../components/courses/add-form';
+import CourseCard from '../../components/courses/course-card';
 import LoadingSpinner from '../../components/ui/loading-spinner';
 import SectionTitle from '../../components/ui/section-title';
 import { useCourses } from '../../contexts/courses-context';
@@ -34,7 +35,7 @@ const Courses: FC = () => {
       No courses available
     </Typography>
   ) : (
-    courses.map(course => <div>{course.name}</div>)
+    courses.map(course => <CourseCard course={course} />)
   );
 
   return (

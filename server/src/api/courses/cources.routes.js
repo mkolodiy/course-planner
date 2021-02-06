@@ -32,6 +32,11 @@ router.get('/', async (req, res, next) => {
   const userId = req.user._id;
   try {
     const courses = await Course.find({ user: userId });
+
+    for (const course of courses) {
+      await course.populate('type').execPopulate();
+    }
+
     res.json({
       courses: courses.map(course =>
         course.toObject({
