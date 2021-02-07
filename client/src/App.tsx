@@ -9,6 +9,7 @@ import Courses from './pages/courses';
 import Profile from './pages/profile';
 import ProtectedRoute from './components/misc/protected-route/ProtectedRoute';
 import CourseTypes from './pages/course-types';
+import Course from './pages/course';
 
 const routes = [
   {
@@ -47,6 +48,12 @@ export const subRoutes = [
   {
     path: '/coursetypes',
     component: CourseTypes,
+    isPrivate: true,
+    exact: true
+  },
+  {
+    path: '/course/:id',
+    component: Course,
     isPrivate: true,
     exact: true
   }

@@ -6,3 +6,6 @@ export const formatDate = (dateString: string) => {
     .reverse()
     .join('.');
 };
+
+export const getUnformattedDate = (dateString: string) =>
+  dateString.split('T')[0];

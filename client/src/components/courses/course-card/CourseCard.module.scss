@@ -3,6 +3,11 @@
   flex-direction: row;
   margin-bottom: 10px;
   padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.12);
+  }
 
   & > div:first-child {
     flex-basis: 90%;

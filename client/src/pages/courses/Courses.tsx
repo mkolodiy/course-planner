@@ -35,7 +35,7 @@ const Courses: FC = () => {
       No courses available
     </Typography>
   ) : (
-    courses.map(course => <CourseCard course={course} />)
+    courses.map(course => <CourseCard key={course._id} course={course} />)
   );
 
   return (

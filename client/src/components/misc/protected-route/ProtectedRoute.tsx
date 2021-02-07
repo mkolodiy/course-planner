@@ -1,12 +1,16 @@
 import React, { FC, ComponentType } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteComponentProps } from 'react-router-dom';
 import { useAuth } from '../../../contexts/auth-context';
 import { useUser } from '../../../contexts/user-context';
 import LoadingSpinner from '../../ui/loading-spinner';
 
+interface Params {
+  id: string;
+}
+
 interface Props {
   path: string;
-  component: ComponentType;
+  component: ComponentType<RouteComponentProps<Params>>;
   isPrivate: boolean;
   exact: boolean;
 }
@@ -27,11 +31,11 @@ const ProtectedRoute: FC<Props> = ({
     <Route
       path={path}
       exact={exact}
-      render={() =>
+      render={props =>
         isPrivate && !isAuthenticated ? (
           <Redirect to={{ pathname: '/signin' }} />
         ) : (
-          <Component />
+          <Component {...props} />
         )
       }
       {...rest}
