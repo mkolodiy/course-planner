@@ -6,3 +6,6 @@ export const isEmpty = (value: unknown) => {
     (typeof value === 'string' && value.trim().length === 0)
   );
 };
+
+export const valueChanged = (oldValue: string, newValue: string) =>
+  newValue && newValue !== '' && newValue !== oldValue;

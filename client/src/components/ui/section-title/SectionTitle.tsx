@@ -6,12 +6,15 @@ interface Props {
   title: string;
 }
 
-const SectionTitle: FC<Props> = ({ title }) => {
+const SectionTitle: FC<Props> = ({ title, children }) => {
   return (
     <div className={styles.sectionTitle}>
-      <Typography component="h1" variant="h4">
-        {title}
-      </Typography>
+      <div className={styles.content}>
+        <Typography component="h1" variant="h4">
+          {title}
+        </Typography>
+        {children}
+      </div>
       <Divider />
     </div>
   );

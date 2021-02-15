@@ -28,7 +28,7 @@ const Course: FC<RouteComponentProps<Params>> = ({ match }) => {
 
   return (
     <>
-      <CourseDetails onSubmit={() => {}} course={selectedCourse} />
+      <CourseDetails course={selectedCourse} />
     </>
   );
 };

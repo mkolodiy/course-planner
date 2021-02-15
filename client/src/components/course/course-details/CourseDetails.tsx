@@ -5,30 +5,41 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  Grid
+  Grid,
+  IconButton
 } from '@material-ui/core';
-import React, { FC, useEffect } from 'react';
+import { Edit, Save } from '@material-ui/icons';
+import React, { FC, useEffect, useState, MouseEvent, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useCourseTypes } from '../../../contexts/course-types-context';
-import { useDialog } from '../../../contexts/dialog-context';
+import { useCourses } from '../../../contexts/courses-context';
 import { getUnformattedDate } from '../../../helper/dateUtils';
 import { setValidationError } from '../../../helper/errorUtils';
 import { Course } from '../../../types/models';
 import { CoursePayload } from '../../../types/payloads';
 import SectionTitle from '../../ui/section-title';
+import styles from './CourseDetails.module.scss';
+import { valueChanged } from '../../../helper/checkUtils';
 
 interface Props {
-  onSubmit: (data: CoursePayload) => void;
   course: Course;
 }
 
-const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
+const CourseDetails: FC<Props> = ({ course }) => {
   const { handleSubmit, errors, control, setError } = useForm();
   const { getCourseTypes, courseTypes } = useCourseTypes();
-  const { closeDialog } = useDialog();
+  const { updateCourse } = useCourses();
 
-  const { name, type, startDate, endDate } = course;
-  console.log(courseTypes);
+  const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const {
+    _id: courseId,
+    name,
+    type: { _id: typeId },
+    startDate,
+    endDate
+  } = course;
 
   useEffect(() => {
     (async () => {
@@ -36,10 +47,39 @@ const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
     })();
   }, []);
 
-  const handleSubmitCb = (data: CoursePayload) => {
+  const activateEditMode = (e: MouseEvent) => {
+    e.preventDefault();
+    setEditModeEnabled(true);
+  };
+
+  const handleSubmitForm = (e: MouseEvent) => {
+    e.preventDefault();
+    formRef?.current?.submit();
+  };
+
+  const onSubmit = async (payload: CoursePayload) => {
+    const {
+      name: newName,
+      type: newType,
+      startDate: newStartDate,
+      endDate: newEndDate
+    } = payload;
+
+    console.log(payload);
+
+    if (
+      !valueChanged(name, newName) &&
+      !valueChanged(typeId, newType) &&
+      !valueChanged(startDate, newStartDate) &&
+      !valueChanged(endDate, newEndDate)
+    ) {
+      setEditModeEnabled(false);
+      return;
+    }
+
     try {
-      onSubmit(data);
-      closeDialog();
+      await updateCourse(courseId, payload);
+      setEditModeEnabled(false);
     } catch (err) {
       setValidationError(err, setError);
     }
@@ -47,11 +87,32 @@ const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
 
   return (
     <>
-      <SectionTitle title="Description" />
+      <SectionTitle title="Description">
+        {editModeEnabled ? (
+          <IconButton
+            aria-label="Save"
+            size="small"
+            className={styles.btn}
+            form="update-course-form"
+            type="submit"
+          >
+            <Save />
+          </IconButton>
+        ) : (
+          <IconButton
+            aria-label="Edit"
+            size="small"
+            className={styles.btn}
+            onClick={activateEditMode}
+          >
+            <Edit />
+          </IconButton>
+        )}
+      </SectionTitle>
       <form
         noValidate
-        onSubmit={handleSubmit(handleSubmitCb)}
-        id="add-course-type-form"
+        onSubmit={handleSubmit(onSubmit)}
+        id="update-course-form"
       >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -74,6 +135,7 @@ const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
                   error={!!errors?.name && !!errors.name?.message}
                   helperText={errors?.name && errors.name?.message}
                   FormHelperTextProps={{ variant: 'standard' }}
+                  disabled={!editModeEnabled}
                   {...props}
                 />
               )}
@@ -85,7 +147,7 @@ const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
               <Controller
                 name="type"
                 control={control}
-                defaultValue={type._id}
+                defaultValue={typeId}
                 rules={{
                   required: 'Course type is required'
                 }}
@@ -96,6 +158,7 @@ const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
                     labelId="type-select-label"
                     label="Course type"
                     error={!!errors?.type && !!errors.type?.message}
+                    disabled={!editModeEnabled}
                     {...props}
                   >
                     {courseTypes.map(courseType => (
@@ -132,6 +195,7 @@ const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
                   error={!!errors?.startDate && !!errors.startDate?.message}
                   helperText={errors?.startDate && errors.startDate?.message}
                   FormHelperTextProps={{ variant: 'standard' }}
+                  disabled={!editModeEnabled}
                   {...props}
                 />
               )}
@@ -158,6 +222,7 @@ const CourseDetails: FC<Props> = ({ onSubmit, course }) => {
                   error={!!errors?.endDate && !!errors.endDate?.message}
                   helperText={errors?.endDate && errors.endDate?.message}
                   FormHelperTextProps={{ variant: 'standard' }}
+                  disabled={!editModeEnabled}
                   {...props}
                 />
               )}

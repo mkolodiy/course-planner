@@ -8,9 +8,7 @@ import { SignUpPayload } from '../../types/payloads';
 import styles from './Profile.module.scss';
 import { useAuth } from '../../contexts/auth-context';
 import { setValidationError } from '../../helper/errorUtils';
-
-const valueChanged = (oldValue: string, newValue: string) =>
-  newValue && newValue !== '' && newValue !== oldValue;
+import { valueChanged } from '../../helper/checkUtils';
 
 const Profile: FC = () => {
   const { signOut } = useAuth();
