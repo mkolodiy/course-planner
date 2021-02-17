@@ -35,13 +35,19 @@ export interface CourseType {
   updatedAt: string;
 }
 
+export interface Participant {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface Course {
   _id: string;
   name: string;
   type: CourseType;
   startDate: string;
   endDate: string;
-  participants: string[];
+  participants: Participant[];
   user: string;
   worklogs: string[];
 }

@@ -65,8 +65,6 @@ const CourseDetails: FC<Props> = ({ course }) => {
       endDate: newEndDate
     } = payload;
 
-    console.log(payload);
-
     if (
       !valueChanged(name, newName) &&
       !valueChanged(typeId, newType) &&

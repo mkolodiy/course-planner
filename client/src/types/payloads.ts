@@ -20,3 +20,8 @@ export interface CoursePayload {
   startDate: string;
   endDate: string;
 }
+
+export interface ParticipantPayload {
+  firstName: string;
+  lastName: string;
+}
