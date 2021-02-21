@@ -38,10 +38,9 @@ const createTestCourse = (courseTypeId, userId) => ({
   user: userId
 });
 
-const createParticipant = courseId => ({
+const createParticipant = () => ({
   firstName: 'Test',
-  lastName: 'Participant',
-  courseId: courseId
+  lastName: 'Participant'
 });
 
 let trainerToken;
@@ -85,10 +84,10 @@ describe('POST /api/v1/participants', () => {
 
   it('should create a new participant', async () => {
     const { _id: courseId } = course;
-    const testParticipant = createParticipant(courseId);
+    const testParticipant = createParticipant();
 
     const response = await supertest(app)
-      .post('/api/v1/participants')
+      .post(`/api/v1/participants/course/${courseId}`)
       .set('Authorization', `Bearer ${trainerToken}`)
       .send(testParticipant)
       .expect('Content-Type', /json/)
@@ -104,11 +103,11 @@ describe('POST /api/v1/participants', () => {
 
   it('should return error if required fields are not provided', async () => {
     const { _id: courseId } = course;
-    const testParticipant = createParticipant(courseId);
+    const testParticipant = createParticipant();
     delete testParticipant.lastName;
 
     const response = await supertest(app)
-      .post('/api/v1/participants')
+      .post(`/api/v1/participants/course/${courseId}`)
       .set('Authorization', `Bearer ${trainerToken}`)
       .send(testParticipant)
       .expect('Content-Type', /json/)

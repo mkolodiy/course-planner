@@ -5,8 +5,9 @@ const Course = require('../courses/courses.model');
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  const { firstName, lastName, courseId } = req.body;
+router.post('/course/:id', async (req, res, next) => {
+  const courseId = req.params.id;
+  const { firstName, lastName } = req.body;
 
   try {
     const participant = await Participant.create({
