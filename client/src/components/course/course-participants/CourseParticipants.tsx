@@ -30,7 +30,8 @@ const CourseParticipants: FC<Props> = ({ course }) => {
     openDialog({
       title: 'New Participant',
       formId: 'add-participant-form',
-      content: <AddForm onSubmit={() => {}} />
+      content: <AddForm onSubmit={() => {}} />,
+      closeButtonText: 'Add'
     });
 
   return (
