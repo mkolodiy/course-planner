@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import React, { createContext, FC, useContext, useReducer } from 'react';
 import { HttpMethod, RestApiUrl, sendRequest } from '../../helper/axios';
-import { CoursePayload } from '../../types/payloads';
+import { CoursePayload, ParticipantPayload } from '../../types/payloads';
 import { useAuth } from '../auth-context';
 import {
   CoursesActionType,
@@ -15,6 +15,10 @@ type CoursesContextContent = CoursesState & {
   updateCourse: (id: string, payload: CoursePayload) => Promise<void>;
   deleteCourse: (id: string) => Promise<void>;
   getCourses: () => Promise<void>;
+  createParticipant: (
+    courseId: string,
+    payload: ParticipantPayload
+  ) => Promise<void>;
 };
 
 const CourseContext = createContext<CoursesContextContent>(
@@ -127,6 +131,38 @@ const CoursesProvider: FC = props => {
     }
   };
 
+  const createParticipant = async (
+    courseId: string,
+    payload: ParticipantPayload
+  ) => {
+    dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
+
+    try {
+      const requestConfig: AxiosRequestConfig = {
+        method: HttpMethod.POST,
+        url: RestApiUrl.CREATE_PARTICIPANT + '/' + courseId,
+        data: payload,
+        headers: {
+          authorization: `Bearer: ${token}`
+        }
+      };
+      const {
+        data: { participant }
+      } = await sendRequest(requestConfig);
+
+      dispatch({
+        type: CoursesActionType.ADD_PARTICIPANT,
+        payload: {
+          participant,
+          courseId
+        }
+      });
+    } catch (err) {
+      dispatch({ type: CoursesActionType.SET_LOADING, payload: false });
+      throw err.response.data;
+    }
+  };
+
   return (
     <CourseContext.Provider
       value={{
@@ -134,6 +170,7 @@ const CoursesProvider: FC = props => {
         updateCourse: updateCourse,
         deleteCourse: deleteCourse,
         getCourses: getCourses,
+        createParticipant,
         ...state
       }}
       {...props}
