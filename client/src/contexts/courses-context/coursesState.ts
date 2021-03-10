@@ -10,6 +10,8 @@ export enum CoursesActionType {
   UPDATE_COURSE = 'UPDATE_COURSE',
   DELETE_COURSE = 'DELETE_COURSE',
   ADD_PARTICIPANT = 'ADD_PARTICIPANT',
+  UPDATE_PARTICIPANT = 'UPDATE_PARTICIPANT',
+  DELETE_PARTICIPANT = 'DELETE_PARTICIPANT',
   SET_COURSES = 'SET_COURSE',
   SET_LOADING = 'SET_LOADING'
 }
@@ -97,6 +99,52 @@ export const coursesReducer = (
       return {
         ...state,
         courses,
+        loading: false
+      };
+    }
+    case CoursesActionType.UPDATE_PARTICIPANT: {
+      // @ts-ignore
+      const courseId = action?.payload?.courseId as string;
+      // @ts-ignore
+      const participant = action?.payload?.participant as Participant;
+
+      const courses = [...state.courses];
+      const itemIndex = courses.findIndex(
+        existingCourse => existingCourse._id === courseId
+      );
+      const course = { ...courses[itemIndex] };
+      const participantIndex = course.participants.findIndex(
+        existingParticipant => existingParticipant._id === participant._id
+      );
+      course.participants[participantIndex] = participant;
+      courses[itemIndex] = course;
+
+      return {
+        ...state,
+        courses: courses,
+        loading: false
+      };
+    }
+    case CoursesActionType.DELETE_PARTICIPANT: {
+      // @ts-ignore
+      const courseId = action?.payload?.courseId as string;
+      // @ts-ignore
+      const participant = action?.payload?.participant as Participant;
+
+      const courses = [...state.courses];
+      const itemIndex = courses.findIndex(
+        existingCourse => existingCourse._id === courseId
+      );
+      const course = { ...courses[itemIndex] };
+      const participantIndex = course.participants.findIndex(
+        existingParticipant => existingParticipant._id === participant._id
+      );
+      course.participants.splice(participantIndex, 1);
+      courses[itemIndex] = course;
+
+      return {
+        ...state,
+        courses: courses,
         loading: false
       };
     }

@@ -37,6 +37,8 @@ const COURSE_TYPE_DELETED = 'Course type successfully deleted.';
 
 const COURSE_DELETED = 'Course successfully deleted.';
 
+const PARTICIPANT_DELETED = 'Participant successfully deleted.';
+
 class CustomError extends Error {
   constructor(cause) {
     super('CustomError');
@@ -55,5 +57,6 @@ module.exports = {
   COURSE_TYPE_IN_USE,
   ACCESS_NOT_ALLOWED,
   COURSE_TYPE_DELETED,
-  COURSE_DELETED
+  COURSE_DELETED,
+  PARTICIPANT_DELETED
 };

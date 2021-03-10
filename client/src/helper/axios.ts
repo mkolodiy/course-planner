@@ -17,7 +17,9 @@ export enum RestApiUrl {
   UPDATE_COURSE = 'courses',
   DELETE_COURSE = 'courses',
   GET_COURSES = 'courses',
-  CREATE_PARTICIPANT = 'participants/course'
+  CREATE_PARTICIPANT = 'participants/course',
+  UPDATE_PARTICIPANT = 'participants',
+  DELETE_PARTICIPANT = 'participants'
 }
 
 export enum HttpMethod {

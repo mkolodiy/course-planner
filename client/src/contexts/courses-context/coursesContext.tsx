@@ -19,6 +19,12 @@ type CoursesContextContent = CoursesState & {
     courseId: string,
     payload: ParticipantPayload
   ) => Promise<void>;
+  updateParticipant: (
+    id: string,
+    courseId: string,
+    payload: ParticipantPayload
+  ) => Promise<void>;
+  deleteParticipant: (id: string) => Promise<void>;
 };
 
 const CourseContext = createContext<CoursesContextContent>(
@@ -163,6 +169,62 @@ const CoursesProvider: FC = props => {
     }
   };
 
+  const updateParticipant = async (
+    id: string,
+    courseId: string,
+    payload: ParticipantPayload
+  ) => {
+    dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
+
+    try {
+      const requestConfig: AxiosRequestConfig = {
+        method: HttpMethod.POST,
+        url: RestApiUrl.UPDATE_PARTICIPANT + '/' + id,
+        data: payload,
+        headers: {
+          authorization: `Bearer: ${token}`
+        }
+      };
+      const {
+        data: { participant }
+      } = await sendRequest(requestConfig);
+
+      dispatch({
+        type: CoursesActionType.UPDATE_PARTICIPANT,
+        payload: {
+          participant,
+          courseId
+        }
+      });
+    } catch (err) {
+      dispatch({ type: CoursesActionType.SET_LOADING, payload: false });
+      throw err.response.data;
+    }
+  };
+
+  const deleteParticipant = async (id: string) => {
+    dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
+
+    try {
+      const requestConfig: AxiosRequestConfig = {
+        method: HttpMethod.DELETE,
+        url: RestApiUrl.UPDATE_PARTICIPANT + '/' + id,
+        headers: {
+          authorization: `Bearer: ${token}`
+        }
+      };
+      await sendRequest(requestConfig);
+
+      dispatch({
+        type: CoursesActionType.UPDATE_PARTICIPANT,
+        payload: id
+      });
+    } catch (err) {
+      dispatch({ type: CoursesActionType.SET_LOADING, payload: false });
+      throw err.response.data;
+    }
+  };
+
   return (
     <CourseContext.Provider
       value={{
@@ -171,6 +233,8 @@ const CoursesProvider: FC = props => {
         deleteCourse: deleteCourse,
         getCourses: getCourses,
         createParticipant,
+        updateParticipant,
+        deleteParticipant,
         ...state
       }}
       {...props}

@@ -1,5 +1,5 @@
 const express = require('express');
-const { participantDeleted } = require('../../common/messages');
+const { PARTICIPANT_DELETED } = require('../../common/errors');
 const Participant = require('./participants.model');
 const Course = require('../courses/courses.model');
 
@@ -30,17 +30,35 @@ router.post('/course/:id', async (req, res, next) => {
   }
 });
 
-// router.delete('/:id', async (req, res, next) => {
-//   const id = req.params.id;
-//   try {
-//     await Participant.findByIdAndDelete(id).exec();
+router.post('/:id', async (req, res, next) => {
+  const id = req.params.id;
+  const { body: update } = req;
+  try {
+    const participant = await Participant.findByIdAndUpdate(id, update, {
+      new: true
+    }).exec();
 
-//     res.json({
-//       message: participantDeleted
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+    res.json({
+      participant: participant.toObject({
+        versionKey: false
+      })
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    await Participant.findByIdAndDelete(id).exec();
+
+    res.json({
+      message: PARTICIPANT_DELETED
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;
