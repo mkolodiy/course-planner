@@ -50,7 +50,7 @@ const CourseTypes: FC = () => {
   const handleEditCourseType = (courseType: CourseType) => () => {
     const { _id } = courseType;
     openDialog({
-      title: 'New Course Type',
+      title: 'Update Course Type',
       closeButtonText: 'Update',
       formId: 'add-course-type-form',
       content: (

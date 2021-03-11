@@ -24,7 +24,7 @@ type CoursesContextContent = CoursesState & {
     courseId: string,
     payload: ParticipantPayload
   ) => Promise<void>;
-  deleteParticipant: (id: string) => Promise<void>;
+  deleteParticipant: (id: string, courseId: string) => Promise<void>;
 };
 
 const CourseContext = createContext<CoursesContextContent>(
@@ -202,13 +202,13 @@ const CoursesProvider: FC = props => {
     }
   };
 
-  const deleteParticipant = async (id: string) => {
+  const deleteParticipant = async (id: string, courseId: string) => {
     dispatch({ type: CoursesActionType.SET_LOADING, payload: true });
 
     try {
       const requestConfig: AxiosRequestConfig = {
         method: HttpMethod.DELETE,
-        url: RestApiUrl.UPDATE_PARTICIPANT + '/' + id,
+        url: RestApiUrl.DELETE_PARTICIPANT + '/' + id,
         headers: {
           authorization: `Bearer: ${token}`
         }
@@ -216,8 +216,11 @@ const CoursesProvider: FC = props => {
       await sendRequest(requestConfig);
 
       dispatch({
-        type: CoursesActionType.UPDATE_PARTICIPANT,
-        payload: id
+        type: CoursesActionType.DELETE_PARTICIPANT,
+        payload: {
+          participantId: id,
+          courseId
+        }
       });
     } catch (err) {
       dispatch({ type: CoursesActionType.SET_LOADING, payload: false });

@@ -8,12 +8,12 @@ import {
   TableHead,
   TableRow
 } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Add, Delete, Edit } from '@material-ui/icons';
 import React, { FC } from 'react';
 import { useCourses } from '../../../contexts/courses-context';
 import { useDialog } from '../../../contexts/dialog-context';
 import { isEmpty } from '../../../helper/checkUtils';
-import { Course } from '../../../types/models';
+import { Course, Participant } from '../../../types/models';
 import { ParticipantPayload } from '../../../types/payloads';
 import SectionTitle from '../../ui/section-title';
 import AddForm from './add-form/AddForm';
@@ -25,7 +25,11 @@ interface Props {
 
 const CourseParticipants: FC<Props> = ({ course }) => {
   const { openDialog } = useDialog();
-  const { createParticipant } = useCourses();
+  const {
+    createParticipant,
+    updateParticipant,
+    deleteParticipant
+  } = useCourses();
 
   const { _id: courseId, participants } = course;
 
@@ -39,6 +43,28 @@ const CourseParticipants: FC<Props> = ({ course }) => {
       content: <AddForm onSubmit={onSubmit} />,
       closeButtonText: 'Add'
     });
+
+  const handleEditParticipant = (participant: Participant) => async () => {
+    const { _id } = participant;
+    openDialog({
+      title: 'Update Participant',
+      closeButtonText: 'Update',
+      formId: 'add-participant-form',
+      content: (
+        <AddForm
+          onSubmit={(data: ParticipantPayload) =>
+            updateParticipant(_id, courseId, data)
+          }
+          participant={participant}
+        />
+      )
+    });
+  };
+
+  const handleDeleteParticipant = (participant: Participant) => async () => {
+    const { _id } = participant;
+    await deleteParticipant(_id, courseId);
+  };
 
   return (
     <div className={styles.courseParticipants}>
@@ -61,6 +87,7 @@ const CourseParticipants: FC<Props> = ({ course }) => {
                 <TableRow>
                   <TableCell>First name</TableCell>
                   <TableCell>Last name</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -68,6 +95,22 @@ const CourseParticipants: FC<Props> = ({ course }) => {
                   <TableRow key={participant._id}>
                     <TableCell>{participant.firstName}</TableCell>
                     <TableCell>{participant.lastName}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="Edit"
+                        size="small"
+                        onClick={handleEditParticipant(participant)}
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        aria-label="Delete"
+                        size="small"
+                        onClick={handleDeleteParticipant(participant)}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

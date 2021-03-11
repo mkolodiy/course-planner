@@ -129,18 +129,19 @@ export const coursesReducer = (
       // @ts-ignore
       const courseId = action?.payload?.courseId as string;
       // @ts-ignore
-      const participant = action?.payload?.participant as Participant;
+      const participantId = action?.payload?.participantId as string;
 
       const courses = [...state.courses];
       const itemIndex = courses.findIndex(
         existingCourse => existingCourse._id === courseId
       );
       const course = { ...courses[itemIndex] };
-      const participantIndex = course.participants.findIndex(
-        existingParticipant => existingParticipant._id === participant._id
+      const participants = [...course.participants];
+      const participantIndex = participants.findIndex(
+        existingParticipant => existingParticipant._id === participantId
       );
-      course.participants.splice(participantIndex, 1);
-      courses[itemIndex] = course;
+      participants.splice(participantIndex, 1);
+      courses[itemIndex] = { ...course, participants };
 
       return {
         ...state,
