@@ -52,11 +52,6 @@ const CourseDetails: FC<Props> = ({ course }) => {
     setEditModeEnabled(true);
   };
 
-  const handleSubmitForm = (e: MouseEvent) => {
-    e.preventDefault();
-    formRef?.current?.submit();
-  };
-
   const onSubmit = async (payload: CoursePayload) => {
     const {
       name: newName,
