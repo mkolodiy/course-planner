@@ -1,4 +1,4 @@
-import { Fab, Typography } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import React, { FC, useEffect } from 'react';
 import AddForm from '../../components/courses/add-form';
@@ -20,7 +20,7 @@ const Courses: FC = () => {
     })();
   }, []);
 
-  const handleCreateCourseType = () => {
+  const handleCreateCourse = () => {
     openDialog({
       title: 'New Course Type',
       formId: 'add-course-type-form',
@@ -40,17 +40,18 @@ const Courses: FC = () => {
 
   return (
     <div className={styles.courses}>
-      <SectionTitle title="Courses" />
+      <SectionTitle title="Courses">
+        <IconButton
+          aria-label="Add"
+          size="small"
+          className={styles.btn}
+          onClick={handleCreateCourse}
+        >
+          <Add />
+        </IconButton>
+      </SectionTitle>
       <Typography variant="subtitle1" component="p"></Typography>
       {body}
-      <Fab
-        color="primary"
-        aria-label="Add"
-        className={styles.fabBtn}
-        onClick={handleCreateCourseType}
-      >
-        <Add />
-      </Fab>
     </div>
   );
 };

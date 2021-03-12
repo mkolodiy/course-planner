@@ -117,17 +117,18 @@ const CourseTypes: FC = () => {
 
   return (
     <div className={styles.courseTypes}>
-      <SectionTitle title="Course Types" />
+      <SectionTitle title="Course Types">
+        <IconButton
+          aria-label="Add"
+          size="small"
+          className={styles.btn}
+          onClick={handleCreateCourseType}
+        >
+          <Add />
+        </IconButton>
+      </SectionTitle>
       <Typography variant="subtitle1" component="p"></Typography>
       {body}
-      <Fab
-        color="primary"
-        aria-label="Add"
-        className={styles.fabBtn}
-        onClick={handleCreateCourseType}
-      >
-        <Add />
-      </Fab>
     </div>
   );
 };

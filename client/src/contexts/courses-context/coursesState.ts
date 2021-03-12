@@ -16,9 +16,11 @@ export enum CoursesActionType {
   SET_LOADING = 'SET_LOADING'
 }
 
+type PayloadObject = { [key: string]: unknown };
+
 export interface CoursesAction {
   type: CoursesActionType;
-  payload?: unknown;
+  payload?: PayloadObject | unknown;
 }
 
 export const initialCoursesState: CoursesState = {
@@ -83,10 +85,9 @@ export const coursesReducer = (
       };
     }
     case CoursesActionType.ADD_PARTICIPANT: {
-      // @ts-ignore
-      const courseId = action?.payload?.courseId as string;
-      // @ts-ignore
-      const participant = action?.payload?.participant as Participant;
+      const payload = action?.payload as PayloadObject;
+      const courseId = payload?.courseId as string;
+      const participant = payload?.participant as Participant;
 
       const courses = [...state.courses];
       const itemIndex = courses.findIndex(
@@ -103,10 +104,9 @@ export const coursesReducer = (
       };
     }
     case CoursesActionType.UPDATE_PARTICIPANT: {
-      // @ts-ignore
-      const courseId = action?.payload?.courseId as string;
-      // @ts-ignore
-      const participant = action?.payload?.participant as Participant;
+      const payload = action?.payload as PayloadObject;
+      const courseId = payload?.courseId as string;
+      const participant = payload?.participant as Participant;
 
       const courses = [...state.courses];
       const itemIndex = courses.findIndex(
@@ -126,22 +126,21 @@ export const coursesReducer = (
       };
     }
     case CoursesActionType.DELETE_PARTICIPANT: {
-      // @ts-ignore
-      const courseId = action?.payload?.courseId as string;
-      // @ts-ignore
-      const participantId = action?.payload?.participantId as string;
+      const payload = action?.payload as PayloadObject;
+      const courseId = payload?.courseId as string;
+      const participantId = payload?.participantId as string;
 
       const courses = [...state.courses];
-      const itemIndex = courses.findIndex(
+      const courseIndex = courses.findIndex(
         existingCourse => existingCourse._id === courseId
       );
-      const course = { ...courses[itemIndex] };
+      const course = { ...courses[courseIndex] };
       const participants = [...course.participants];
       const participantIndex = participants.findIndex(
         existingParticipant => existingParticipant._id === participantId
       );
       participants.splice(participantIndex, 1);
-      courses[itemIndex] = { ...course, participants };
+      courses[courseIndex] = { ...course, participants };
 
       return {
         ...state,
