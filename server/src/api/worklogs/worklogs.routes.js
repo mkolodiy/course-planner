@@ -6,16 +6,16 @@ const Worklog = require('./worklogs.model');
 
 const router = express.Router();
 
-router.post('/generate', async (req, res, next) => {
-  const { courseId } = req.body;
+router.post('/course/:id', async (req, res, next) => {
+  const courseId = req.params.id;
   try {
     const course = await Course.findById(courseId).exec();
+    await course.populate('type').execPopulate();
+    await course.populate('participants').execPopulate();
     const {
-      type: { courseDuration }
-    } = await couse.getProperties();
-
-    const participants = await Participant.find({ course: courseId }).exec();
-    const participantsProperties = Participant.getProperties(participants);
+      type: { courseDuration },
+      participants
+    } = course;
 
     const worklogs = [];
     for (i = 0; i < courseDuration; i++) {
@@ -23,25 +23,30 @@ router.post('/generate', async (req, res, next) => {
       const worklog = await Worklog.create({
         date: new Date()
       });
-      const { id: worklogId } = worklog.getProperties();
+      const { _id: worklogId } = worklog;
 
-      for (const participant of participantsProperties) {
+      console.log('participants', participants);
+      for (const participant of participants) {
         const worklogEntry = await WorklogEntry.create({
-          participant: participant.id,
+          participant: participant._id,
           worklog: worklogId
         });
-        worklogEntries.push(worklogEntry.getProperties().id);
+        console.log('worklogEntry', worklogEntry);
+        worklogEntries.push(worklogEntry._id);
       }
 
+      console.log('worklogEntries', worklogEntries);
       await Worklog.findByIdAndUpdate(worklogId, { worklogEntries }).exec();
       worklogs.push(worklogId);
     }
+    console.log('worklogs', worklogs);
     await Course.findByIdAndUpdate(courseId, { worklogs });
 
     res.json({
       worklogs
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });

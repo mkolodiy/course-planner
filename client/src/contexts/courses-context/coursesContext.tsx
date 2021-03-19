@@ -11,8 +11,12 @@ import {
   ParticipantsAPI,
   useParticipantsAPI
 } from './hooks';
+import { useWorklogsAPI, WorklogsAPI } from './hooks/useWorklogs';
 
-type CoursesContextContent = CoursesState & CoursesAPI & ParticipantsAPI;
+type CoursesContextContent = CoursesState &
+  CoursesAPI &
+  ParticipantsAPI &
+  WorklogsAPI;
 
 const CourseContext = createContext<CoursesContextContent>(
   {} as CoursesContextContent
@@ -25,12 +29,14 @@ const CoursesProvider: FC = props => {
   const { token } = useAuth();
   const coursesAPI = useCoursesAPI(dispatch, token);
   const participantsAPI = useParticipantsAPI(dispatch, token);
+  const worklogsAPI = useWorklogsAPI(dispatch, token);
 
   return (
     <CourseContext.Provider
       value={{
         ...coursesAPI,
         ...participantsAPI,
+        ...worklogsAPI,
         ...state
       }}
       {...props}

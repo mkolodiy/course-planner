@@ -16,10 +16,4 @@ const worklogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-worklogSchema.methods.getProperties = function () {
-  return {
-    id: this._id
-  };
-};
-
 module.exports = mongoose.model('Worklog', worklogSchema);

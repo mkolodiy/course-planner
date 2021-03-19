@@ -21,20 +21,4 @@ const worklogEntrySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-worklogEntrySchema.methods.getProperties = function () {
-  return {
-    id: this._id,
-    present: this.present,
-    participant: this.participant
-  };
-};
-
-worklogEntrySchema.statics.getProperties = function (object) {
-  if (Array.isArray(object)) {
-    return object.map(entry => entry.getProperties());
-  }
-
-  return object.getProperties();
-};
-
 module.exports = mongoose.model('WorklogEntry', worklogEntrySchema);
