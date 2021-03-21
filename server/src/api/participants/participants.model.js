@@ -14,4 +14,4 @@ const participantsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Paricipant', participantsSchema);
+module.exports = mongoose.model('Participant', participantsSchema);

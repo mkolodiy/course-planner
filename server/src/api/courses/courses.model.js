@@ -25,7 +25,7 @@ const courseSchema = new mongoose.Schema(
     participants: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Paricipant'
+        ref: 'Participant'
       }
     ],
     worklogs: [

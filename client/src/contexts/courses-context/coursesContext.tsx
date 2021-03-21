@@ -11,7 +11,7 @@ import {
   ParticipantsAPI,
   useParticipantsAPI
 } from './hooks';
-import { useWorklogsAPI, WorklogsAPI } from './hooks/useWorklogs';
+import { useWorklogsAPI, WorklogsAPI } from './hooks/useWorklogsAPI';
 
 type CoursesContextContent = CoursesState &
   CoursesAPI &

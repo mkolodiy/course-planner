@@ -24,12 +24,15 @@ export const useWorklogsAPI = (
         }
       };
       const {
-        data: { worklog }
+        data: { worklogs }
       } = await sendRequest(requestConfig);
 
       dispatch({
-        type: CoursesActionType.ADD_WORKLOG,
-        payload: worklog
+        type: CoursesActionType.ADD_WORKLOGS,
+        payload: {
+          courseId,
+          worklogs
+        }
       });
     } catch (err) {
       dispatch({ type: CoursesActionType.SET_LOADING, payload: false });

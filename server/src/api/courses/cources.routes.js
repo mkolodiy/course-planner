@@ -36,6 +36,19 @@ router.get('/', async (req, res, next) => {
     for (const course of courses) {
       await course.populate('type').execPopulate();
       await course.populate('participants').execPopulate();
+      await course
+        .populate({
+          path: 'worklogs',
+          populate: {
+            path: 'worklogEntries',
+            model: 'WorklogEntry',
+            populate: {
+              path: 'participant',
+              model: 'Participant'
+            }
+          }
+        })
+        .execPopulate();
     }
 
     res.json({

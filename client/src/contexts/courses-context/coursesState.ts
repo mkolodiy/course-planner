@@ -1,4 +1,4 @@
-import { Course, Participant } from '../../types/models';
+import { Course, Participant, Worklog } from '../../types/models';
 
 export interface CoursesState {
   courses: Course[];
@@ -12,7 +12,7 @@ export enum CoursesActionType {
   ADD_PARTICIPANT = 'ADD_PARTICIPANT',
   UPDATE_PARTICIPANT = 'UPDATE_PARTICIPANT',
   DELETE_PARTICIPANT = 'DELETE_PARTICIPANT',
-  ADD_WORKLOG = 'ADD_WORKLOG',
+  ADD_WORKLOGS = 'ADD_WORKLOGS',
   SET_COURSES = 'SET_COURSE',
   SET_LOADING = 'SET_LOADING'
 }
@@ -122,7 +122,7 @@ export const coursesReducer = (
 
       return {
         ...state,
-        courses: courses,
+        courses,
         loading: false
       };
     }
@@ -145,7 +145,25 @@ export const coursesReducer = (
 
       return {
         ...state,
-        courses: courses,
+        courses,
+        loading: false
+      };
+    }
+    case CoursesActionType.ADD_WORKLOGS: {
+      const payload = action?.payload as PayloadObject;
+      const courseId = payload?.courseId as string;
+      const worklogs = payload?.worklogs as Worklog[];
+
+      const courses = [...state.courses];
+      const courseIndex = courses.findIndex(
+        existingCourse => existingCourse._id === courseId
+      );
+      const course = { ...courses[courseIndex] };
+      courses[courseIndex] = { ...course, worklogs };
+
+      return {
+        ...state,
+        courses,
         loading: false
       };
     }

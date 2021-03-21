@@ -24,26 +24,42 @@ router.post('/course/:id', async (req, res, next) => {
         date: new Date()
       });
       const { _id: worklogId } = worklog;
-
-      console.log('participants', participants);
+      console.log(participants);
       for (const participant of participants) {
         const worklogEntry = await WorklogEntry.create({
-          participant: participant._id,
-          worklog: worklogId
+          participant: participant._id
         });
-        console.log('worklogEntry', worklogEntry);
+
         worklogEntries.push(worklogEntry._id);
       }
-
-      console.log('worklogEntries', worklogEntries);
-      await Worklog.findByIdAndUpdate(worklogId, { worklogEntries }).exec();
-      worklogs.push(worklogId);
+      const updatedWorklog = await Worklog.findByIdAndUpdate(
+        worklogId,
+        { worklogEntries },
+        {
+          new: true
+        }
+      ).exec();
+      await updatedWorklog
+        .populate({
+          path: 'worklogEntries',
+          populate: {
+            path: 'participant',
+            model: 'Participant'
+          }
+        })
+        .execPopulate();
+      worklogs.push(updatedWorklog);
     }
-    console.log('worklogs', worklogs);
-    await Course.findByIdAndUpdate(courseId, { worklogs });
+    await Course.findByIdAndUpdate(courseId, {
+      worklogs: worklogs.map(element => element._id)
+    });
 
     res.json({
-      worklogs
+      worklogs: worklogs.map(element =>
+        element.toObject({
+          versionKey: false
+        })
+      )
     });
   } catch (err) {
     console.log(err);

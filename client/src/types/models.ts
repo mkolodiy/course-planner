@@ -49,5 +49,15 @@ export interface Course {
   endDate: string;
   participants: Participant[];
   user: string;
-  worklogs: string[];
+  worklogs: Worklog[];
+}
+
+export interface WorklogEntry {
+  present: boolean;
+  participant: Participant;
+}
+
+export interface Worklog {
+  date: string;
+  worklogEntries: WorklogEntry[];
 }
