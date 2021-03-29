@@ -53,11 +53,13 @@ export interface Course {
 }
 
 export interface WorklogEntry {
+  _id: string;
   present: boolean;
   participant: Participant;
 }
 
 export interface Worklog {
+  _id: string;
   date: string;
   worklogEntries: WorklogEntry[];
 }
